@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevelopmentNotes", "DevelopmentNotes", "{6B93B2F5-1A05-45E6-889E-A44E32265E40}"
+	ProjectSection(SolutionItems) = preProject
+		DevelopmentNotes.txt = DevelopmentNotes.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

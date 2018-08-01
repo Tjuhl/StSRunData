@@ -1,0 +1,8 @@
+DEVELOPMENT GOALS
+* develop a solution that downloads StS run data and extracts it into a database for further data analysis and processing
+
+MILESTONES
+* read and store StS run data consisting of JSON files from target directory
+* store JSON data in database
+* develop tabular cube with fact and dimension tables
+* make data accessible through PowerBI on a webpage
