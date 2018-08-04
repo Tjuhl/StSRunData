@@ -6,3 +6,6 @@ MILESTONES
 * store JSON data in database
 * develop tabular cube with fact and dimension tables
 * make data accessible through PowerBI on a webpage
+
+NOTES
+! limit data import to is_endless = "false" and is_daily = "false"
