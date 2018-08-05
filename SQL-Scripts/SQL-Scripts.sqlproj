@@ -65,5 +65,9 @@
     <Build Include="imp.sql" />
     <Build Include="tmp.sql" />
     <Build Include="dwh.sql" />
+    <Build Include="InsertSTSJSONData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SQL-Scripts.publish.xml" />
   </ItemGroup>
 </Project>

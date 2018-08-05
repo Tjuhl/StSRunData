@@ -2,6 +2,7 @@ DEVELOPMENT GOALS
 * develop a solution that downloads StS run data and extracts it into a database for further data analysis and processing
 
 MILESTONES
+* read sample run JSON file and store to database - done
 * read and store StS run data consisting of JSON files from target directory
 * store JSON data in database
 * develop tabular cube with fact and dimension tables
@@ -9,3 +10,4 @@ MILESTONES
 
 NOTES
 ! limit data import to is_endless = "false" and is_daily = "false"
+* data connection localhost "Data Source=localhost;Initial Catalog=DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;"
