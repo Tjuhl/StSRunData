@@ -59,13 +59,32 @@
     <Folder Include="Properties" />
     <Folder Include="imp\" />
     <Folder Include="imp\Tables\" />
+    <Folder Include="imp\StoredProcedures" />
+    <Folder Include="dwh" />
+    <Folder Include="dwh\Tables" />
+    <Folder Include="dwh\Schemas" />
+    <Folder Include="imp\Schemas" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="imp\Tables\StSJSONData.sql" />
-    <Build Include="imp.sql" />
     <Build Include="tmp.sql" />
-    <Build Include="dwh.sql" />
-    <Build Include="InsertSTSJSONData.sql" />
+    <Build Include="imp\Tables\StSJSONBlob.sql" />
+    <Build Include="dwh\Tables\DimBuildVersion.sql" />
+    <Build Include="dwh\Tables\DimCampfire.sql" />
+    <Build Include="dwh\Tables\DimCard.sql" />
+    <Build Include="dwh\Tables\DimCharacater.sql" />
+    <Build Include="dwh\Tables\DimEncounter.sql" />
+    <Build Include="dwh\Tables\DimEvent.sql" />
+    <Build Include="dwh\Tables\DimPath.sql" />
+    <Build Include="dwh\Tables\DimPotion.sql" />
+    <Build Include="dwh\Tables\DimRelic.sql" />
+    <Build Include="dwh\Tables\DimStartingBonus.sql" />
+    <Build Include="dwh\Tables\DimVictory.sql" />
+    <Build Include="dwh\Tables\FactFloor.sql" />
+    <Build Include="dwh\Tables\FactRun.sql" />
+    <Build Include="imp\StoredProcedures\spStSRunLoadDimensions.sql" />
+    <Build Include="dwh\Schemas\dwh.sql" />
+    <Build Include="imp\Schemas\imp.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SQL-Scripts.publish.xml" />

@@ -3,10 +3,16 @@ DEVELOPMENT GOALS
 
 MILESTONES
 * read sample run JSON file and store to database - done
-* read and store StS run data consisting of all JSON files from target directory
+* read and store StS run data consisting of all JSON files from target directory - done
 * transform JSON data in database
+** load dimension tables - done
+** load fact tables
 * develop tabular cube with appropriate data model
 * make data accessible through PowerBI
 
 NOTES
-! limit data import to is_endless = "false" and is_daily = "false"
+
+RESOURCES
+* openrowset https://docs.microsoft.com/en-us/sql/t-sql/functions/openrowset-transact-sql?view=sql-server-2017
+* string_split https://docs.microsoft.com/en-us/sql/t-sql/functions/string-split-transact-sql?view=sql-server-2017
+* openjson https://docs.microsoft.com/en-us/sql/t-sql/functions/openjson-transact-sql?view=sql-server-2017
