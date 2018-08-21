@@ -2,6 +2,16 @@
 AS 
 
 BEGIN 
+	-- [dwh].[DimAscensionLevel]
+	INSERT INTO [dwh].[DimAscensionLevel]
+	SELECT 
+		distinct j.[ascension_level],
+		getdate(),
+		getdate(),
+		system_user
+	FROM [imp].[StSJSONData] j
+	LEFT OUTER JOIN [dwh].[DimAscensionLevel] s ON s.[AscensionLevel] = j.[ascension_level]
+		WHERE s.[AscensionLevel] is null
 
 	-- [dwh].[DimBuildVersion]
 	INSERT INTO [dwh].[DimBuildVersion]

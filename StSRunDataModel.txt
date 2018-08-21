@@ -7,7 +7,7 @@ create table dwh.FactRun
 	CharacterId int null, -- "character_chosen": "IRONCLAD",	
 	StartingBonusId int null, -- "neow_bonus": "UPGRADE_CARD", "neow_cost": "NONE",
 	-- measures
-	FloorReachedId int null, -- "floor_reached": 51,
+	FloorReached int null, -- "floor_reached": 51,
 	CampfireRests int null, -- "campfire_rested": 3,
 	CampfireUpgrades int null, -- "campfire_upgraded": 6,
 	PurchasedPurges int null -- "purchased_purges": 0,
@@ -19,7 +19,7 @@ create table dwh.FactRun
 	CircletCount int null, -- "circlet_count": 0,
 	-- timestamps
 	LocalTime datetime null, -- "local_time": "20180803170448",
-	SeedGeneratedTimeStamp datetime null, -- "seed_source_timestamp": 692510983248,
+	SeedSourceTimeStamp datetime null, -- "seed_source_timestamp": 692510983248,
 	CreatedAt datetime null, -- "timestamp": 1533308688,
 	-- other
 	SeedPlayed bigint null, -- "seed_played": "7425912388502425920",	
@@ -41,8 +41,8 @@ create table dwh.FactRun
 
 create table dwh.FactFloor
 (
-	FloorId int not null, -- 0 to 51
 	PlayId nvarchar(32) null, -- "play_id": "821b51eb-5b50-4a99-85da-9c96b2358515",
+	FloorId int not null, -- 0 to 51	
 	CharacterId int null, -- "character_chosen": "DEFECT",
 	CardId int null, -- "card_choices": [{"floor": 1,"not_picked": ["Pommel Strike", "Reckless Charge"],"picked": "Heavy Blade"}, "items_purchased": ["Clothesline", "Strength Potion", "Pantograph", "Energy Potion"],
 	PathId int null, -- "path_per_floor": ["M", "?", "$", "M", "M", "R", "E", "R", "T", "M", "E", "M", "M", "E", "R", "B", null, "M", "$", "?", "?", "$", "R", "M", "M", "T", "?", "$", "E", "R", "M", "R", "B", null, "M", "?", "M", "$", "M", "R", "E", "R", "T", "M", "M", "E", "M", "M", "R", "B"],

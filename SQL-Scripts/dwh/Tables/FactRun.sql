@@ -8,6 +8,7 @@
 	StartingBonusId int null, -- "neow_bonus": "UPGRADE_CARD", "neow_cost": "NONE",
 	-- measures
 	FloorReachedId int null, -- "floor_reached": 51,
+	KilledById int null, -- "killed_by": "3 Darklings",
 	CampfireRests int null, -- "campfire_rested": 3,
 	CampfireUpgrades int null, -- "campfire_upgraded": 6,
 	PurchasedPurges int null, -- "purchased_purges": 0,

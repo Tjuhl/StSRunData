@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="83"
-  DTS:VersionGUID="{5AF8BBDC-B679-4384-B9BD-CB9D4ECD5151}">
+  DTS:VersionBuild="87"
+  DTS:VersionGUID="{A24D3405-E69E-4649-9A82-225B9AABBDC1}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -126,6 +126,7 @@ END CATCH;"</DTS:PropertyExpression>
 
 SELECT @JSON = BulkColumn
 FROM OPENROWSET (BULK '"+ @[User::StSRunDirectory] +""+ @[User::StSRunFilename] +"', SINGLE_CLOB) as j
+
 BEGIN TRY
 INSERT INTO imp.StSJSONData
 (
@@ -155,6 +156,7 @@ INSERT INTO imp.StSJSONData
 	,items_purchased
 	,items_purged
 	,items_purged_floors
+	,killed_by
 	,local_time
 	,master_deck
 	,max_hp_per_floor
@@ -207,6 +209,7 @@ SELECT
 	,items_purchased
 	,items_purged
 	,items_purged_floors
+	,COALESCE(killed_by,'victory! :-)')
 	,local_time
 	,master_deck
 	,max_hp_per_floor
@@ -259,6 +262,7 @@ WITH
 	items_purchased nvarchar(max) as json,
 	items_purged nvarchar(max) as json,
 	items_purged_floors nvarchar(max) as json,
+	killed_by nvarchar(255),
 	local_time bigint '$.local_time',
 	master_deck nvarchar(max) as json,
 	max_hp_per_floor nvarchar(max) as json,
@@ -297,7 +301,7 @@ END CATCH;"</DTS:PropertyExpression>
                 <SQLTask:SqlTaskData
                   SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
                   SQLTask:BypassPrepare="False"
-                  SQLTask:SqlStatementSource="DECLARE @JSON varchar(max)&#xA;&#xA;SELECT @JSON = BulkColumn&#xA;FROM OPENROWSET (BULK 'C:\Games\Steam\steamapps\common\SlayTheSpire\runs\1533588883.run', SINGLE_CLOB) as j&#xA;BEGIN TRY&#xA;INSERT INTO imp.StSJSONData&#xA;(&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate &#x9;&#xA;&#x9;,inserted_at&#xA;)&#xA;&#xA;SELECT&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate&#xA;&#x9;,getdate()&#xA;FROM OPENJSON(@json)&#xA;WITH &#xA;(&#xA;&#x9;ascension_level int '$.ascension_level',&#xA;&#x9;boss_relics nvarchar(max) as json,&#xA;&#x9;build_version date '$.build_version',&#xA;&#x9;campfire_choices nvarchar(max) as json,&#xA;&#x9;campfire_rested int '$.campfire_rested',&#xA;&#x9;campfire_upgraded int '$.campfire_upgraded',&#xA;&#x9;card_choices nvarchar(max) as json,&#xA;&#x9;character_chosen nvarchar(25) '$.character_chosen',&#xA;&#x9;chose_seed nvarchar(5) '$.chose_seed',&#xA;&#x9;circlet_count int '$.circlet_count',&#xA;&#x9;current_hp_per_floor nvarchar(max) as json,&#xA;&#x9;damage_taken nvarchar(max) as json,&#xA;&#x9;event_choices nvarchar(max) as json,&#xA;&#x9;floor_reached int '$.floor_reached',&#xA;&#x9;gold int '$.gold',&#xA;&#x9;gold_per_floor nvarchar(max) as json,&#xA;&#x9;is_ascension_mode nvarchar(5) '$.is_ascension_mode',&#xA;&#x9;is_beta nvarchar(5) '$.is_beta',&#xA;&#x9;is_daily nvarchar(5) '$.is_daily',&#xA;&#x9;is_endless nvarchar(5) '$.is_endless',&#xA;&#x9;is_prod nvarchar(5) '$.is_prod',&#xA;&#x9;is_trial nvarchar(5) '$.is_trial',&#xA;&#x9;item_purchase_floors nvarchar(max) as json,&#xA;&#x9;items_purchased nvarchar(max) as json,&#xA;&#x9;items_purged nvarchar(max) as json,&#xA;&#x9;items_purged_floors nvarchar(max) as json,&#xA;&#x9;local_time bigint '$.local_time',&#xA;&#x9;master_deck nvarchar(max) as json,&#xA;&#x9;max_hp_per_floor nvarchar(max) as json,&#xA;&#x9;neow_bonus nvarchar(100) '$.neow_bonus',&#xA;&#x9;neow_cost nvarchar(100) '$.neow_cost',&#xA;&#x9;path_per_floor nvarchar(max) as json,&#xA;&#x9;path_taken nvarchar(max) as json,&#xA;&#x9;play_id nvarchar(48) '$.play_id',&#xA;&#x9;player_experience bigint '$.player_experience',&#xA;&#x9;playtime int '$.playtime',&#xA;&#x9;potions_floor_spawned nvarchar(max) as json,&#xA;&#x9;potions_floor_usage nvarchar(max) as json,&#xA;&#x9;potions_obtained nvarchar(max) as json,&#xA;&#x9;purchased_purges int '$.purchased_purges',&#xA;&#x9;relics nvarchar(max) as json,&#xA;&#x9;relics_obtained nvarchar(max) as json,&#xA;&#x9;score int '$.score',&#xA;&#x9;seed_played bigint '$.seed_played',&#xA;&#x9;seed_source_timestamp bigint '$.seed_source_timestamp',&#xA;&#x9;run_timestamp bigint '$.timestamp',&#xA;&#x9;victory nvarchar(5) '$.victory',&#xA;&#x9;win_rate int '$.win_rate'&#xA;) AS jsonValues&#xA;END TRY&#xA;&#xA;BEGIN CATCH&#xA;SELECT  &#xA;&#x9; ERROR_NUMBER() AS ErrorNumber  &#xA;&#x9;,ERROR_SEVERITY() AS ErrorSeverity  &#xA;&#x9;,ERROR_STATE() AS ErrorState  &#xA;&#x9;,ERROR_PROCEDURE() AS ErrorProcedure  &#xA;&#x9;,ERROR_LINE() AS ErrorLine  &#xA;&#x9;,ERROR_MESSAGE() AS ErrorMessage;  &#xA;END CATCH;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+                  SQLTask:SqlStatementSource="DECLARE @JSON varchar(max)&#xA;&#xA;SELECT @JSON = BulkColumn&#xA;FROM OPENROWSET (BULK 'C:\Games\Steam\steamapps\common\SlayTheSpire\runs\1533588883.run', SINGLE_CLOB) as j&#xA;&#xA;BEGIN TRY&#xA;INSERT INTO imp.StSJSONData&#xA;(&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,killed_by&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate &#x9;&#xA;&#x9;,inserted_at&#xA;)&#xA;&#xA;SELECT&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,COALESCE(killed_by,'victory! :-)')&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate&#xA;&#x9;,getdate()&#xA;FROM OPENJSON(@json)&#xA;WITH &#xA;(&#xA;&#x9;ascension_level int '$.ascension_level',&#xA;&#x9;boss_relics nvarchar(max) as json,&#xA;&#x9;build_version date '$.build_version',&#xA;&#x9;campfire_choices nvarchar(max) as json,&#xA;&#x9;campfire_rested int '$.campfire_rested',&#xA;&#x9;campfire_upgraded int '$.campfire_upgraded',&#xA;&#x9;card_choices nvarchar(max) as json,&#xA;&#x9;character_chosen nvarchar(25) '$.character_chosen',&#xA;&#x9;chose_seed nvarchar(5) '$.chose_seed',&#xA;&#x9;circlet_count int '$.circlet_count',&#xA;&#x9;current_hp_per_floor nvarchar(max) as json,&#xA;&#x9;damage_taken nvarchar(max) as json,&#xA;&#x9;event_choices nvarchar(max) as json,&#xA;&#x9;floor_reached int '$.floor_reached',&#xA;&#x9;gold int '$.gold',&#xA;&#x9;gold_per_floor nvarchar(max) as json,&#xA;&#x9;is_ascension_mode nvarchar(5) '$.is_ascension_mode',&#xA;&#x9;is_beta nvarchar(5) '$.is_beta',&#xA;&#x9;is_daily nvarchar(5) '$.is_daily',&#xA;&#x9;is_endless nvarchar(5) '$.is_endless',&#xA;&#x9;is_prod nvarchar(5) '$.is_prod',&#xA;&#x9;is_trial nvarchar(5) '$.is_trial',&#xA;&#x9;item_purchase_floors nvarchar(max) as json,&#xA;&#x9;items_purchased nvarchar(max) as json,&#xA;&#x9;items_purged nvarchar(max) as json,&#xA;&#x9;items_purged_floors nvarchar(max) as json,&#xA;&#x9;killed_by nvarchar(255),&#xA;&#x9;local_time bigint '$.local_time',&#xA;&#x9;master_deck nvarchar(max) as json,&#xA;&#x9;max_hp_per_floor nvarchar(max) as json,&#xA;&#x9;neow_bonus nvarchar(100) '$.neow_bonus',&#xA;&#x9;neow_cost nvarchar(100) '$.neow_cost',&#xA;&#x9;path_per_floor nvarchar(max) as json,&#xA;&#x9;path_taken nvarchar(max) as json,&#xA;&#x9;play_id nvarchar(48) '$.play_id',&#xA;&#x9;player_experience bigint '$.player_experience',&#xA;&#x9;playtime int '$.playtime',&#xA;&#x9;potions_floor_spawned nvarchar(max) as json,&#xA;&#x9;potions_floor_usage nvarchar(max) as json,&#xA;&#x9;potions_obtained nvarchar(max) as json,&#xA;&#x9;purchased_purges int '$.purchased_purges',&#xA;&#x9;relics nvarchar(max) as json,&#xA;&#x9;relics_obtained nvarchar(max) as json,&#xA;&#x9;score int '$.score',&#xA;&#x9;seed_played bigint '$.seed_played',&#xA;&#x9;seed_source_timestamp bigint '$.seed_source_timestamp',&#xA;&#x9;run_timestamp bigint '$.timestamp',&#xA;&#x9;victory nvarchar(5) '$.victory',&#xA;&#x9;win_rate int '$.win_rate'&#xA;) AS jsonValues&#xA;END TRY&#xA;&#xA;BEGIN CATCH&#xA;SELECT  &#xA;&#x9; ERROR_NUMBER() AS ErrorNumber  &#xA;&#x9;,ERROR_SEVERITY() AS ErrorSeverity  &#xA;&#x9;,ERROR_STATE() AS ErrorState  &#xA;&#x9;,ERROR_PROCEDURE() AS ErrorProcedure  &#xA;&#x9;,ERROR_LINE() AS ErrorLine  &#xA;&#x9;,ERROR_MESSAGE() AS ErrorMessage;  &#xA;END CATCH;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
               </DTS:ObjectData>
             </DTS:Executable>
           </DTS:Executables>
@@ -350,7 +354,84 @@ END CATCH;"</DTS:PropertyExpression>
           DTS:To="Package\load StS run files\for each StS run" />
       </DTS:PrecedenceConstraints>
     </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\update StS dimension tables"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{26931BB8-8172-48D3-9B97-F7A56B3D7FE6}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="update StS dimension tables">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\update StS dimension tables\EXECUTE imp spStSRunLoadDimensions"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Task &quot;SQL ausführen&quot;"
+          DTS:DTSID="{E9542FE8-5E0B-4B01-A6CD-024DBE876990}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="EXECUTE imp spStSRunLoadDimensions"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
+              SQLTask:SqlStatementSource="EXECUTE [imp].[spStSRunLoadDimensions];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\update StS fact tables"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:Disabled="True"
+      DTS:DTSID="{3B5449B8-4C50-4ECF-B2EB-3DB3D3900088}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="update StS fact tables">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Task &quot;SQL ausführen&quot;"
+          DTS:DTSID="{9e351704-84fb-4c65-8e7c-4e16c99ce8c8}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="EXECUTE imp spStSRunLoadFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
+              SQLTask:SqlStatementSource="EXECUTE [imp].[spStSRunLoadDimensions];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
   </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{CA28F104-9DBF-4FDC-9BF1-1D54553D33F3}"
+      DTS:From="Package\load StS run files"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\update StS dimension tables" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{767374B3-7F8B-4AA8-B1B5-53347EC01261}"
+      DTS:From="Package\update StS dimension tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\update StS fact tables" />
+  </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
 <!--If you manually edit this section and make a mistake, you can delete it. -->
@@ -362,7 +443,7 @@ END CATCH;"</DTS:PropertyExpression>
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="300,42"
           Id="Package\load StS run files\for each StS run\IN StSRun file &gt;&gt; OUT DWH imp StSJSONBlob"
@@ -397,7 +478,7 @@ END CATCH;"</DTS:PropertyExpression>
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="312,204"
-          Size="312,247"
+          Size="312,248"
           Id="Package\load StS run files\for each StS run"
           TopLeft="5.50000000000006,107.5" />
         <NodeLayout
@@ -433,6 +514,72 @@ END CATCH;"</DTS:PropertyExpression>
           Size="323,454"
           Id="Package\load StS run files"
           TopLeft="5.50000000000006,5.5" />
+        <NodeLayout
+          Size="268,42"
+          Id="Package\update StS dimension tables\EXECUTE imp spStSRunLoadDimensions"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="279,102"
+          Size="279,146"
+          Id="Package\update StS dimension tables"
+          TopLeft="27.5000000000001,519.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="167,459.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="238,42"
+          Id="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="249,102"
+          Size="249,146"
+          Id="Package\update StS fact tables"
+          TopLeft="42.5000000000001,725.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="167,665.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </Package>

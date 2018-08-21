@@ -25,6 +25,7 @@
 	[items_purchased] [nvarchar](max) NULL,
 	[items_purged] [nvarchar](max) NULL,
 	[items_purged_floors] [nvarchar](max) NULL,
+	[killed_by] [nvarchar](255) NULL,
 	[local_time] [bigint] NULL,
 	[master_deck] [nvarchar](max) NULL,
 	[max_hp_per_floor] [nvarchar](max) NULL,

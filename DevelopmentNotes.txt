@@ -12,6 +12,9 @@ MILESTONES
 
 NOTES
 
+TO DO
+* add killed by
+
 RESOURCES
 * openrowset https://docs.microsoft.com/en-us/sql/t-sql/functions/openrowset-transact-sql?view=sql-server-2017
 * string_split https://docs.microsoft.com/en-us/sql/t-sql/functions/string-split-transact-sql?view=sql-server-2017
