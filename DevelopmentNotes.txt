@@ -6,14 +6,12 @@ MILESTONES
 * read and store StS run data consisting of all JSON files from target directory - done
 * transform JSON data in database
 ** load dimension tables - done
-** load fact tables
+** load fact tables for run data - done
+** load fact table for floor choices
 * develop tabular cube with appropriate data model
 * make data accessible through PowerBI
 
 NOTES
-
-TO DO
-* add killed by
 
 RESOURCES
 * openrowset https://docs.microsoft.com/en-us/sql/t-sql/functions/openrowset-transact-sql?view=sql-server-2017

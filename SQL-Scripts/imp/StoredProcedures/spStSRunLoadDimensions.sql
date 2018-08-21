@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE imp.spStSRunLoadDimensions
+﻿CREATE PROCEDURE [imp].[spStSRunLoadDimensions]
 AS 
 
 BEGIN 
@@ -45,7 +45,7 @@ BEGIN
 	-- [dwh].[DimCard]
 	INSERT INTO [dwh].[DimCard]
 	SELECT 
-		distinct REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),
+		distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s'),
 		getdate(),
 		getdate(),
 		system_user
@@ -142,7 +142,7 @@ BEGIN
 	-- [dwh].[DimRelic]
 	INSERT INTO [dwh].[DimRelic]
 	SELECT 
-		distinct REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),
+		distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s'),
 		getdate(),
 		getdate(),
 		system_user
@@ -150,6 +150,7 @@ BEGIN
 	CROSS APPLY STRING_SPLIT([relics], ',')
 	LEFT OUTER JOIN [dwh].[DimRelic] s ON s.[RelicName] = value
 		WHERE s.[RelicName] is null
+		
 
 	-- [dwh].[DimStartingBonus]
 	INSERT INTO [dwh].[DimStartingBonus]
@@ -175,3 +176,6 @@ BEGIN
 		WHERE s.[VictoryTF] is null
 
 END
+GO
+
+

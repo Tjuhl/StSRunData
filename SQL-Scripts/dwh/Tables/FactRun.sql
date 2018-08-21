@@ -6,9 +6,10 @@
 	AscensionId int null, -- "ascension_level": 15,
 	CharacterId int null, -- "character_chosen": "IRONCLAD",	
 	StartingBonusId int null, -- "neow_bonus": "UPGRADE_CARD", "neow_cost": "NONE",
-	-- measures
-	FloorReachedId int null, -- "floor_reached": 51,
 	KilledById int null, -- "killed_by": "3 Darklings",
+	VictoryId int null, -- "victory": true,
+	-- measures
+	FloorReached int null, -- "floor_reached": 51,	
 	CampfireRests int null, -- "campfire_rested": 3,
 	CampfireUpgrades int null, -- "campfire_upgraded": 6,
 	PurchasedPurges int null, -- "purchased_purges": 0,
@@ -19,22 +20,19 @@
 	WinRate float null, -- "win_rate": 0
 	CircletCount int null, -- "circlet_count": 0,
 	-- timestamps
-	LocalTime datetime null, -- "local_time": "20180803170448",
-	SeedGeneratedTimeStamp datetime null, -- "seed_source_timestamp": 692510983248,
-	CreatedAt datetime null, -- "timestamp": 1533308688,
+	RunStartedAt int null, -- "local_time": "20180803170448",	
 	-- other
 	SeedPlayed bigint null, -- "seed_played": "7425912388502425920",	
 	-- additional data
-	VictoryId tinyint null, -- "victory": true,
 	MasterDeck nvarchar(max) null, -- "master_deck": ["Strike_R", "Strike_R", "Strike_R", "Strike_R", "Strike_R", "Defend_R", "Defend_R", "Defend_R", "Defend_R", "Bash+1", "AscendersBane", "Heavy Blade+1", "Clothesline+1", "True Grit+1", "Immolate+1", "Battle Trance", "Headbutt", "Shrug It Off", "Iron Wave", "Inflame+1", "Offering", "Shrug It Off", "Necronomicurse", "Armaments+1", "Combust+1", "Shrug It Off", "Spot Weakness", "Barricade", "Disarm+1", "Feel No Pain", "Armaments+1", "Doubt", "Metallicize", "Shrug It Off"],
 	Relics nvarchar(max) null, -- "relics": ["Burning Blood", "Orichalcum", "Potion Belt", "Nunchaku", "Paper Frog", "Snecko Eye", "Pantograph", "Necronomicon", "Pear", "Centennial Puzzle", "Cursed Key", "Red Mask", "Singing Bowl", "Lantern", "Omamori"],
-	ChoseSeed bit null, -- "chose_seed": false,
-	IsAscensionMode bit null, -- "is_ascension_mode": true,
-	IsBeta bit null, -- "is_beta": false,
-	IsDaily bit null, -- "is_daily": false,
-	IsEndless bit null, -- "is_endless": false,
-	IsProd bit null, -- "is_prod": false,
-	IsTrial bit null, -- "is_trial": false,	
+	ChoseSeed nvarchar(5) null, -- "chose_seed": false,
+	IsAscensionMode nvarchar(5) null, -- "is_ascension_mode": true,
+	IsBeta nvarchar(5) null, -- "is_beta": false,
+	IsDaily nvarchar(5) null, -- "is_daily": false,
+	IsEndless nvarchar(5) null, -- "is_endless": false,
+	IsProd nvarchar(5) null, -- "is_prod": false,
+	IsTrial nvarchar(5) null, -- "is_trial": false,	
 	ETLInsertedAt datetime null,
 	ETLUpdatedAt datetime null,
 	ETLUser nvarchar(50) null

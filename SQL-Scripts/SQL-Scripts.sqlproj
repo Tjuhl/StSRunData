@@ -85,6 +85,7 @@
     <Build Include="dwh\Schemas\dwh.sql" />
     <Build Include="imp\Schemas\imp.sql" />
     <Build Include="dwh\Tables\DimAscensionLevel.sql" />
+    <Build Include="imp\StoredProcedures\spStSRunLoadFacts.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SQL-Scripts.publish.xml" />

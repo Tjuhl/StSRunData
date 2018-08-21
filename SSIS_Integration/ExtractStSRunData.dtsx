@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="93"
-  DTS:VersionGUID="{FD9A5982-727C-4D53-8525-CA3A43575E09}">
+  DTS:VersionBuild="94"
+  DTS:VersionGUID="{38A58112-74DA-4F5D-8F46-1A42DE7C7580}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -342,7 +342,6 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\update StS fact tables"
       DTS:CreationName="STOCK:SEQUENCE"
       DTS:Description="Sequence Container"
-      DTS:Disabled="True"
       DTS:DTSID="{3B5449B8-4C50-4ECF-B2EB-3DB3D3900088}"
       DTS:ExecutableType="STOCK:SEQUENCE"
       DTS:LocaleID="-1"
@@ -363,7 +362,7 @@ END CATCH;"</DTS:PropertyExpression>
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
-              SQLTask:SqlStatementSource="EXECUTE [imp].[spStSRunLoadDimensions];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+              SQLTask:SqlStatementSource="EXECUTE [imp].[spStSRunLoadFacts];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
       </DTS:Executables>
@@ -406,7 +405,7 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="312,102"
+          PanelSize="312,103"
           Size="312,146"
           Id="Package\load StS run files\for each StS run"
           TopLeft="5.50000000000003,107.5" />
@@ -439,7 +438,7 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="323,308"
+          PanelSize="323,309"
           Size="323,352"
           Id="Package\load StS run files"
           TopLeft="5.50000000000003,5.5" />
@@ -450,10 +449,21 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="279,102"
+          PanelSize="279,103"
           Size="279,146"
           Id="Package\update StS dimension tables"
           TopLeft="27.5000000000001,417.5" />
+        <NodeLayout
+          Size="238,42"
+          Id="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="249,103"
+          Size="249,146"
+          Id="Package\update StS fact tables"
+          TopLeft="42.5000000000001,623.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="167,357.5">
@@ -476,17 +486,6 @@ END CATCH;"</DTS:PropertyExpression>
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="238,42"
-          Id="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
-          TopLeft="5.5,5.5" />
-        <ContainerLayout
-          HeaderHeight="43"
-          IsExpanded="True"
-          PanelSize="249,102"
-          Size="249,146"
-          Id="Package\update StS fact tables"
-          TopLeft="42.5000000000001,623.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
           TopLeft="167,563.5">
