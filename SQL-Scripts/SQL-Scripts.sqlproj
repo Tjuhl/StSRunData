@@ -68,7 +68,6 @@
   <ItemGroup>
     <Build Include="imp\Tables\StSJSONData.sql" />
     <Build Include="tmp.sql" />
-    <Build Include="imp\Tables\StSJSONBlob.sql" />
     <Build Include="dwh\Tables\DimBuildVersion.sql" />
     <Build Include="dwh\Tables\DimCampfire.sql" />
     <Build Include="dwh\Tables\DimCard.sql" />
