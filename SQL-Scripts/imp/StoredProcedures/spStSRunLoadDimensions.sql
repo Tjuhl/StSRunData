@@ -107,7 +107,8 @@ BEGIN
 		WHEN t.[path_type] = '?' THEN 'event' 
 		WHEN t.[path_type] = 'R' THEN 'campfire' 
 		WHEN t.[path_type] = 'M' THEN 'enemy' 
-		WHEN t.[path_type] = 'BOSS' THEN 'boss' 
+		WHEN t.[path_type] = 'BOSS' THEN 'boss'
+		WHEN t.[path_type] = 'brel' THEN 'boss_relic' 
 		ELSE 'unknown'
 		END AS [path_name],
 		getdate(),
@@ -116,7 +117,7 @@ BEGIN
 	FROM 
 		(	
 		SELECT 
-			distinct replace(replace(replace(replace(value,'[',''),']',''),' ',''),'"','') as [path_type]
+			DISTINCT REPLACE(REPLACE(REPLACE(REPLACE(value,'[',''),']',''),' ',''),'"','') AS [path_type]
 		FROM [imp].[StSJSONData]
 		CROSS APPLY STRING_SPLIT([path_taken], ',')
 		) t
@@ -167,7 +168,7 @@ BEGIN
 	-- [dwh].[DimVictory]
 	INSERT INTO [dwh].[DimVictory]
 	SELECT 
-		distinct CASE WHEN [victory]='true' then 1 else 0 end as [victory],
+		distinct [victory],
 		getdate(),
 		getdate(),
 		system_user

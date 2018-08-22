@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="94"
-  DTS:VersionGUID="{38A58112-74DA-4F5D-8F46-1A42DE7C7580}">
+  DTS:VersionBuild="101"
+  DTS:VersionGUID="{0E0B5427-5984-48E0-BAE8-E6D5E52BBC8E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -181,7 +181,7 @@ SELECT
 	,neow_bonus
 	,neow_cost
 	,path_per_floor
-	,path_taken
+	,REPLACE(path_taken,'\"BOSS\",','\"BOSS\", \"brel\",') AS path_taken
 	,play_id
 	,player_experience
 	,playtime
@@ -266,7 +266,7 @@ END CATCH;"</DTS:PropertyExpression>
                 <SQLTask:SqlTaskData
                   SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
                   SQLTask:BypassPrepare="False"
-                  SQLTask:SqlStatementSource="DECLARE @JSON varchar(max)&#xA;&#xA;SELECT @JSON = BulkColumn&#xA;FROM OPENROWSET (BULK '1533588883.run', SINGLE_CLOB) as j&#xA;&#xA;BEGIN TRY&#xA;INSERT INTO imp.StSJSONData&#xA;(&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,killed_by&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate &#x9;&#xA;&#x9;,inserted_at&#xA;)&#xA;&#xA;SELECT&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,COALESCE(killed_by,'victory! :-)')&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate&#xA;&#x9;,getdate()&#xA;FROM OPENJSON(@json)&#xA;WITH &#xA;(&#xA;&#x9;ascension_level int '$.ascension_level',&#xA;&#x9;boss_relics nvarchar(max) as json,&#xA;&#x9;build_version date '$.build_version',&#xA;&#x9;campfire_choices nvarchar(max) as json,&#xA;&#x9;campfire_rested int '$.campfire_rested',&#xA;&#x9;campfire_upgraded int '$.campfire_upgraded',&#xA;&#x9;card_choices nvarchar(max) as json,&#xA;&#x9;character_chosen nvarchar(25) '$.character_chosen',&#xA;&#x9;chose_seed nvarchar(5) '$.chose_seed',&#xA;&#x9;circlet_count int '$.circlet_count',&#xA;&#x9;current_hp_per_floor nvarchar(max) as json,&#xA;&#x9;damage_taken nvarchar(max) as json,&#xA;&#x9;event_choices nvarchar(max) as json,&#xA;&#x9;floor_reached int '$.floor_reached',&#xA;&#x9;gold int '$.gold',&#xA;&#x9;gold_per_floor nvarchar(max) as json,&#xA;&#x9;is_ascension_mode nvarchar(5) '$.is_ascension_mode',&#xA;&#x9;is_beta nvarchar(5) '$.is_beta',&#xA;&#x9;is_daily nvarchar(5) '$.is_daily',&#xA;&#x9;is_endless nvarchar(5) '$.is_endless',&#xA;&#x9;is_prod nvarchar(5) '$.is_prod',&#xA;&#x9;is_trial nvarchar(5) '$.is_trial',&#xA;&#x9;item_purchase_floors nvarchar(max) as json,&#xA;&#x9;items_purchased nvarchar(max) as json,&#xA;&#x9;items_purged nvarchar(max) as json,&#xA;&#x9;items_purged_floors nvarchar(max) as json,&#xA;&#x9;killed_by nvarchar(255),&#xA;&#x9;local_time bigint '$.local_time',&#xA;&#x9;master_deck nvarchar(max) as json,&#xA;&#x9;max_hp_per_floor nvarchar(max) as json,&#xA;&#x9;neow_bonus nvarchar(100) '$.neow_bonus',&#xA;&#x9;neow_cost nvarchar(100) '$.neow_cost',&#xA;&#x9;path_per_floor nvarchar(max) as json,&#xA;&#x9;path_taken nvarchar(max) as json,&#xA;&#x9;play_id nvarchar(48) '$.play_id',&#xA;&#x9;player_experience bigint '$.player_experience',&#xA;&#x9;playtime int '$.playtime',&#xA;&#x9;potions_floor_spawned nvarchar(max) as json,&#xA;&#x9;potions_floor_usage nvarchar(max) as json,&#xA;&#x9;potions_obtained nvarchar(max) as json,&#xA;&#x9;purchased_purges int '$.purchased_purges',&#xA;&#x9;relics nvarchar(max) as json,&#xA;&#x9;relics_obtained nvarchar(max) as json,&#xA;&#x9;score int '$.score',&#xA;&#x9;seed_played bigint '$.seed_played',&#xA;&#x9;seed_source_timestamp bigint '$.seed_source_timestamp',&#xA;&#x9;run_timestamp bigint '$.timestamp',&#xA;&#x9;victory nvarchar(5) '$.victory',&#xA;&#x9;win_rate int '$.win_rate'&#xA;) AS jsonValues&#xA;END TRY&#xA;&#xA;BEGIN CATCH&#xA;SELECT  &#xA;&#x9; ERROR_NUMBER() AS ErrorNumber  &#xA;&#x9;,ERROR_SEVERITY() AS ErrorSeverity  &#xA;&#x9;,ERROR_STATE() AS ErrorState  &#xA;&#x9;,ERROR_PROCEDURE() AS ErrorProcedure  &#xA;&#x9;,ERROR_LINE() AS ErrorLine  &#xA;&#x9;,ERROR_MESSAGE() AS ErrorMessage;  &#xA;END CATCH;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+                  SQLTask:SqlStatementSource="DECLARE @JSON varchar(max)&#xA;&#xA;SELECT @JSON = BulkColumn&#xA;FROM OPENROWSET (BULK '1533588883.run', SINGLE_CLOB) as j&#xA;&#xA;BEGIN TRY&#xA;INSERT INTO imp.StSJSONData&#xA;(&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,killed_by&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate &#x9;&#xA;&#x9;,inserted_at&#xA;)&#xA;&#xA;SELECT&#xA;&#x9; ascension_level&#xA;&#x9;,boss_relics&#xA;&#x9;,build_version&#xA;&#x9;,campfire_choices&#xA;&#x9;,campfire_rested&#xA;&#x9;,campfire_upgraded&#xA;&#x9;,card_choices&#xA;&#x9;,character_chosen&#xA;&#x9;,chose_seed&#xA;&#x9;,circlet_count&#xA;&#x9;,current_hp_per_floor&#xA;&#x9;,damage_taken&#xA;&#x9;,event_choices&#xA;&#x9;,floor_reached&#xA;&#x9;,gold&#xA;&#x9;,gold_per_floor&#xA;&#x9;,is_ascension_mode&#xA;&#x9;,is_beta&#xA;&#x9;,is_daily&#xA;&#x9;,is_endless&#xA;&#x9;,is_prod&#xA;&#x9;,is_trial&#xA;&#x9;,item_purchase_floors&#xA;&#x9;,items_purchased&#xA;&#x9;,items_purged&#xA;&#x9;,items_purged_floors&#xA;&#x9;,COALESCE(killed_by,'victory! :-)')&#xA;&#x9;,local_time&#xA;&#x9;,master_deck&#xA;&#x9;,max_hp_per_floor&#xA;&#x9;,neow_bonus&#xA;&#x9;,neow_cost&#xA;&#x9;,path_per_floor&#xA;&#x9;,REPLACE(path_taken,'&quot;BOSS&quot;,','&quot;BOSS&quot;, &quot;brel&quot;,') AS path_taken&#xA;&#x9;,play_id&#xA;&#x9;,player_experience&#xA;&#x9;,playtime&#xA;&#x9;,potions_floor_spawned&#xA;&#x9;,potions_floor_usage&#xA;&#x9;,potions_obtained&#xA;&#x9;,purchased_purges&#xA;&#x9;,relics&#xA;&#x9;,relics_obtained&#xA;&#x9;,score&#xA;&#x9;,seed_played&#xA;&#x9;,seed_source_timestamp&#xA;&#x9;,run_timestamp&#xA;&#x9;,victory&#xA;&#x9;,win_rate&#xA;&#x9;,getdate()&#xA;FROM OPENJSON(@json)&#xA;WITH &#xA;(&#xA;&#x9;ascension_level int '$.ascension_level',&#xA;&#x9;boss_relics nvarchar(max) as json,&#xA;&#x9;build_version date '$.build_version',&#xA;&#x9;campfire_choices nvarchar(max) as json,&#xA;&#x9;campfire_rested int '$.campfire_rested',&#xA;&#x9;campfire_upgraded int '$.campfire_upgraded',&#xA;&#x9;card_choices nvarchar(max) as json,&#xA;&#x9;character_chosen nvarchar(25) '$.character_chosen',&#xA;&#x9;chose_seed nvarchar(5) '$.chose_seed',&#xA;&#x9;circlet_count int '$.circlet_count',&#xA;&#x9;current_hp_per_floor nvarchar(max) as json,&#xA;&#x9;damage_taken nvarchar(max) as json,&#xA;&#x9;event_choices nvarchar(max) as json,&#xA;&#x9;floor_reached int '$.floor_reached',&#xA;&#x9;gold int '$.gold',&#xA;&#x9;gold_per_floor nvarchar(max) as json,&#xA;&#x9;is_ascension_mode nvarchar(5) '$.is_ascension_mode',&#xA;&#x9;is_beta nvarchar(5) '$.is_beta',&#xA;&#x9;is_daily nvarchar(5) '$.is_daily',&#xA;&#x9;is_endless nvarchar(5) '$.is_endless',&#xA;&#x9;is_prod nvarchar(5) '$.is_prod',&#xA;&#x9;is_trial nvarchar(5) '$.is_trial',&#xA;&#x9;item_purchase_floors nvarchar(max) as json,&#xA;&#x9;items_purchased nvarchar(max) as json,&#xA;&#x9;items_purged nvarchar(max) as json,&#xA;&#x9;items_purged_floors nvarchar(max) as json,&#xA;&#x9;killed_by nvarchar(255),&#xA;&#x9;local_time bigint '$.local_time',&#xA;&#x9;master_deck nvarchar(max) as json,&#xA;&#x9;max_hp_per_floor nvarchar(max) as json,&#xA;&#x9;neow_bonus nvarchar(100) '$.neow_bonus',&#xA;&#x9;neow_cost nvarchar(100) '$.neow_cost',&#xA;&#x9;path_per_floor nvarchar(max) as json,&#xA;&#x9;path_taken nvarchar(max) as json,&#xA;&#x9;play_id nvarchar(48) '$.play_id',&#xA;&#x9;player_experience bigint '$.player_experience',&#xA;&#x9;playtime int '$.playtime',&#xA;&#x9;potions_floor_spawned nvarchar(max) as json,&#xA;&#x9;potions_floor_usage nvarchar(max) as json,&#xA;&#x9;potions_obtained nvarchar(max) as json,&#xA;&#x9;purchased_purges int '$.purchased_purges',&#xA;&#x9;relics nvarchar(max) as json,&#xA;&#x9;relics_obtained nvarchar(max) as json,&#xA;&#x9;score int '$.score',&#xA;&#x9;seed_played bigint '$.seed_played',&#xA;&#x9;seed_source_timestamp bigint '$.seed_source_timestamp',&#xA;&#x9;run_timestamp bigint '$.timestamp',&#xA;&#x9;victory nvarchar(5) '$.victory',&#xA;&#x9;win_rate int '$.win_rate'&#xA;) AS jsonValues&#xA;END TRY&#xA;&#xA;BEGIN CATCH&#xA;SELECT  &#xA;&#x9; ERROR_NUMBER() AS ErrorNumber  &#xA;&#x9;,ERROR_SEVERITY() AS ErrorSeverity  &#xA;&#x9;,ERROR_STATE() AS ErrorState  &#xA;&#x9;,ERROR_PROCEDURE() AS ErrorProcedure  &#xA;&#x9;,ERROR_LINE() AS ErrorLine  &#xA;&#x9;,ERROR_MESSAGE() AS ErrorMessage;  &#xA;END CATCH;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
               </DTS:ObjectData>
             </DTS:Executable>
           </DTS:Executables>
@@ -280,13 +280,13 @@ END CATCH;"</DTS:PropertyExpression>
           </DTS:ForEachVariableMappings>
         </DTS:Executable>
         <DTS:Executable
-          DTS:refId="Package\load StS run files\truncate DWH imp StSJSONData StSJSONBlob"
+          DTS:refId="Package\load StS run files\truncate DWH imp StSJSONData"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Task &quot;SQL ausführen&quot;"
           DTS:DTSID="{A2603863-41C2-4645-A1B3-3947E270B4DC}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
-          DTS:ObjectName="truncate DWH imp StSJSONData StSJSONBlob"
+          DTS:ObjectName="truncate DWH imp StSJSONData"
           DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
           DTS:ThreadHint="0">
           <DTS:Variables />
@@ -294,7 +294,7 @@ END CATCH;"</DTS:PropertyExpression>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
               SQLTask:BypassPrepare="False"
-              SQLTask:SqlStatementSource="truncate table imp.StSJSONData; &#xA;truncate table imp.StSJSONBlob;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+              SQLTask:SqlStatementSource="truncate table imp.StSJSONData" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
       </DTS:Executables>
@@ -303,11 +303,28 @@ END CATCH;"</DTS:PropertyExpression>
           DTS:refId="Package\load StS run files.PrecedenceConstraints[Constraint]"
           DTS:CreationName=""
           DTS:DTSID="{CAE07F80-DEA2-4AB0-8A74-C8DE2062D629}"
-          DTS:From="Package\load StS run files\truncate DWH imp StSJSONData StSJSONBlob"
+          DTS:From="Package\load StS run files\truncate DWH imp StSJSONData"
           DTS:LogicalAnd="True"
           DTS:ObjectName="Constraint"
           DTS:To="Package\load StS run files\for each StS run" />
       </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\truncate DWH tables"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Task &quot;SQL ausführen&quot;"
+      DTS:DTSID="{5126DD97-0ED4-4E4D-AFCF-5606DE104F5E}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="truncate DWH tables"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [dwh].[DimAscensionLevel]&#xA;TRUNCATE TABLE [dwh].[DimBuildVersion]&#xA;TRUNCATE TABLE [dwh].[DimCampfire]&#xA;TRUNCATE TABLE [dwh].[DimCard]&#xA;TRUNCATE TABLE [dwh].[DimCharacter]&#xA;TRUNCATE TABLE [dwh].[DimEncounter]&#xA;TRUNCATE TABLE [dwh].[DimEvent]&#xA;TRUNCATE TABLE [dwh].[DimPath]&#xA;TRUNCATE TABLE [dwh].[DimPotion]&#xA;TRUNCATE TABLE [dwh].[DimRelic]&#xA;TRUNCATE TABLE [dwh].[DimStartingBonus]&#xA;TRUNCATE TABLE [dwh].[DimVictory]&#xA;TRUNCATE TABLE [dwh].[FactFloor]&#xA;TRUNCATE TABLE [dwh].[FactRun]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
       DTS:refId="Package\update StS dimension tables"
@@ -342,6 +359,7 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\update StS fact tables"
       DTS:CreationName="STOCK:SEQUENCE"
       DTS:Description="Sequence Container"
+      DTS:Disabled="True"
       DTS:DTSID="{3B5449B8-4C50-4ECF-B2EB-3DB3D3900088}"
       DTS:ExecutableType="STOCK:SEQUENCE"
       DTS:LocaleID="-1"
@@ -385,6 +403,14 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
       DTS:To="Package\update StS fact tables" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{456B6DF5-4DF9-4035-B42B-394EAE4D15AC}"
+      DTS:From="Package\truncate DWH tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\load StS run files" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -405,14 +431,14 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="312,103"
+          PanelSize="312,102"
           Size="312,146"
           Id="Package\load StS run files\for each StS run"
           TopLeft="5.50000000000003,107.5" />
         <NodeLayout
-          Size="296,42"
-          Id="Package\load StS run files\truncate DWH imp StSJSONData StSJSONBlob"
-          TopLeft="13.5,5.5" />
+          Size="232,42"
+          Id="Package\load StS run files\truncate DWH imp StSJSONData"
+          TopLeft="45.5,5.5" />
         <EdgeLayout
           Id="Package\load StS run files.PrecedenceConstraints[Constraint]"
           TopLeft="161.5,47.5">
@@ -438,10 +464,10 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="323,309"
+          PanelSize="323,308"
           Size="323,352"
           Id="Package\load StS run files"
-          TopLeft="5.50000000000003,5.5" />
+          TopLeft="5.50000000000006,107.5" />
         <NodeLayout
           Size="268,42"
           Id="Package\update StS dimension tables\EXECUTE imp spStSRunLoadDimensions"
@@ -449,10 +475,10 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="279,103"
+          PanelSize="279,102"
           Size="279,146"
           Id="Package\update StS dimension tables"
-          TopLeft="27.5000000000001,417.5" />
+          TopLeft="27.5000000000001,519.5" />
         <NodeLayout
           Size="238,42"
           Id="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
@@ -460,13 +486,13 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="249,103"
+          PanelSize="249,102"
           Size="249,146"
           Id="Package\update StS fact tables"
-          TopLeft="42.5000000000001,623.5" />
+          TopLeft="42.5000000000001,725.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="167,357.5">
+          TopLeft="167,459.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -488,7 +514,33 @@ END CATCH;"</DTS:PropertyExpression>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="167,563.5">
+          TopLeft="167,665.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="177,42"
+          Id="Package\truncate DWH tables"
+          TopLeft="78.5,5.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="167,47.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
