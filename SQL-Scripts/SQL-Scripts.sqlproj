@@ -70,13 +70,11 @@
     <Build Include="tmp.sql" />
     <Build Include="dwh\Tables\DimBuildVersion.sql" />
     <Build Include="dwh\Tables\DimCampfire.sql" />
-    <Build Include="dwh\Tables\DimCard.sql" />
+    <Build Include="dwh\Tables\DimItem.sql" />
     <Build Include="dwh\Tables\DimCharacater.sql" />
     <Build Include="dwh\Tables\DimEncounter.sql" />
     <Build Include="dwh\Tables\DimEvent.sql" />
     <Build Include="dwh\Tables\DimPath.sql" />
-    <Build Include="dwh\Tables\DimPotion.sql" />
-    <Build Include="dwh\Tables\DimRelic.sql" />
     <Build Include="dwh\Tables\DimStartingBonus.sql" />
     <Build Include="dwh\Tables\DimVictory.sql" />
     <Build Include="dwh\Tables\FactFloor.sql" />

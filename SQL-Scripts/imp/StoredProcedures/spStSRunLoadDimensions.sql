@@ -42,18 +42,6 @@ BEGIN
 		WHERE s.[CampfireChoice] is null
 		AND s.[CampfireAction] is null
 
-	-- [dwh].[DimCard]
-	INSERT INTO [dwh].[DimCard]
-	SELECT 
-		distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s'),
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData]
-	CROSS APPLY STRING_SPLIT([master_deck], ',')
-	LEFT OUTER JOIN [dwh].[DimCard] s ON s.[CardName] = value
-		WHERE s.[CardName] is null
-
 	-- [dwh].[DimCharacter]
 	INSERT INTO [dwh].[DimCharacter]
 	SELECT 
@@ -125,33 +113,45 @@ BEGIN
 		WHERE s.[PathType] is null
 		OR s.[PathName] is null
 
-	-- [dwh].[DimPotion] 
-	INSERT INTO [dwh].[DimPotion]
-	SELECT 
-		distinct [key],
+	-- [dwh].[DimItem]
+	INSERT INTO [dwh].[DimItem]
+	SELECT  
+		tt.[ItemName],
+		tt.[ItemType],
 		getdate(),
 		getdate(),
 		system_user
-	FROM [imp].[StSJSONData]
-	CROSS APPLY OPENJSON ([potions_obtained])
-	WITH (
-		[key] nvarchar(255)
-	) AS J
-	LEFT OUTER JOIN [dwh].[DimPotion] s ON s.[PotionName] = j.[key]
-		WHERE s.[PotionName] is null
-
-	-- [dwh].[DimRelic]
-	INSERT INTO [dwh].[DimRelic]
-	SELECT 
-		distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s'),
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData]
-	CROSS APPLY STRING_SPLIT([relics], ',')
-	LEFT OUTER JOIN [dwh].[DimRelic] s ON s.[RelicName] = value
-		WHERE s.[RelicName] is null
-		
+	FROM 
+		(
+		SELECT 
+			distinct card_choices.[picked] AS [ItemName],
+			'card' AS [ItemType]
+		FROM [imp].[StSJSONData] j
+		CROSS APPLY OPENJSON ([card_choices]) 
+		WITH ([picked] nvarchar(255)) AS card_choices
+		UNION ALL 
+		SELECT 
+			distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s')  AS [ItemName],
+			'card' AS [ItemType]
+		FROM [imp].[StSJSONData]
+		CROSS APPLY STRING_SPLIT([master_deck], ',')
+		UNION ALL 
+		SELECT 
+			distinct [key] AS [ItemName],
+			'potion' AS [ItemType]
+		FROM [imp].[StSJSONData]
+		CROSS APPLY OPENJSON ([potions_obtained])
+		WITH ([key] nvarchar(255)) AS J	
+		UNION ALL 
+		SELECT 
+			distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s') AS [ItemName],
+			'relic' AS [ItemType]
+		FROM [imp].[StSJSONData]
+		CROSS APPLY STRING_SPLIT([relics], ',')	
+		) tt
+	LEFT OUTER JOIN [dwh].[DimItem] s ON s.[ItemName] = tt.[ItemName] AND s.[ItemType] = tt.[ItemType]
+		WHERE s.[ItemName] is null
+		OR s.[ItemType] is null	
 
 	-- [dwh].[DimStartingBonus]
 	INSERT INTO [dwh].[DimStartingBonus]
