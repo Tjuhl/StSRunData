@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="101"
-  DTS:VersionGUID="{0E0B5427-5984-48E0-BAE8-E6D5E52BBC8E}">
+  DTS:VersionBuild="106"
+  DTS:VersionGUID="{5BAC7CA7-9223-4004-95C0-4BF3BA426319}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -313,6 +313,7 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\truncate DWH tables"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Task &quot;SQL ausführen&quot;"
+      DTS:Disabled="True"
       DTS:DTSID="{5126DD97-0ED4-4E4D-AFCF-5606DE104F5E}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -323,7 +324,7 @@ END CATCH;"</DTS:PropertyExpression>
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
-          SQLTask:SqlStatementSource="TRUNCATE TABLE [dwh].[DimAscensionLevel]&#xA;TRUNCATE TABLE [dwh].[DimBuildVersion]&#xA;TRUNCATE TABLE [dwh].[DimCampfire]&#xA;TRUNCATE TABLE [dwh].[DimCard]&#xA;TRUNCATE TABLE [dwh].[DimCharacter]&#xA;TRUNCATE TABLE [dwh].[DimEncounter]&#xA;TRUNCATE TABLE [dwh].[DimEvent]&#xA;TRUNCATE TABLE [dwh].[DimPath]&#xA;TRUNCATE TABLE [dwh].[DimPotion]&#xA;TRUNCATE TABLE [dwh].[DimRelic]&#xA;TRUNCATE TABLE [dwh].[DimStartingBonus]&#xA;TRUNCATE TABLE [dwh].[DimVictory]&#xA;TRUNCATE TABLE [dwh].[FactFloor]&#xA;TRUNCATE TABLE [dwh].[FactRun]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [dwh].[DimAscensionLevel]&#xA;TRUNCATE TABLE [dwh].[DimBuildVersion]&#xA;TRUNCATE TABLE [dwh].[DimCampfire]&#xA;TRUNCATE TABLE [dwh].[DimCharacter]&#xA;TRUNCATE TABLE [dwh].[DimEncounter]&#xA;TRUNCATE TABLE [dwh].[DimEvent]&#xA;TRUNCATE TABLE [dwh].[DimItem]&#xA;TRUNCATE TABLE [dwh].[DimItemInteraction]&#xA;TRUNCATE TABLE [dwh].[DimPath]&#xA;TRUNCATE TABLE [dwh].[DimStartingBonus]&#xA;TRUNCATE TABLE [dwh].[DimVictory]&#xA;TRUNCATE TABLE [dwh].[FactFloor]&#xA;TRUNCATE TABLE [dwh].[FactRun]&#xA;TRUNCATE TABLE [dwh].[FactFloorEvent]&#xA;TRUNCATE TABLE [dwh].[FactFloorItem]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -359,7 +360,6 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\update StS fact tables"
       DTS:CreationName="STOCK:SEQUENCE"
       DTS:Description="Sequence Container"
-      DTS:Disabled="True"
       DTS:DTSID="{3B5449B8-4C50-4ECF-B2EB-3DB3D3900088}"
       DTS:ExecutableType="STOCK:SEQUENCE"
       DTS:LocaleID="-1"
@@ -431,7 +431,7 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="312,102"
+          PanelSize="312,103"
           Size="312,146"
           Id="Package\load StS run files\for each StS run"
           TopLeft="5.50000000000003,107.5" />
@@ -464,10 +464,14 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="323,308"
+          PanelSize="323,309"
           Size="323,352"
           Id="Package\load StS run files"
           TopLeft="5.50000000000006,107.5" />
+        <NodeLayout
+          Size="177,42"
+          Id="Package\truncate DWH tables"
+          TopLeft="78.5,5.5" />
         <NodeLayout
           Size="268,42"
           Id="Package\update StS dimension tables\EXECUTE imp spStSRunLoadDimensions"
@@ -475,7 +479,7 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="279,102"
+          PanelSize="279,103"
           Size="279,146"
           Id="Package\update StS dimension tables"
           TopLeft="27.5000000000001,519.5" />
@@ -486,7 +490,7 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="249,102"
+          PanelSize="249,103"
           Size="249,146"
           Id="Package\update StS fact tables"
           TopLeft="42.5000000000001,725.5" />
@@ -534,10 +538,6 @@ END CATCH;"</DTS:PropertyExpression>
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="177,42"
-          Id="Package\truncate DWH tables"
-          TopLeft="78.5,5.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
           TopLeft="167,47.5">

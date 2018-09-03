@@ -105,7 +105,7 @@ BEGIN
 	FROM 
 		(	
 		SELECT 
-			DISTINCT REPLACE(REPLACE(REPLACE(REPLACE(value,'[',''),']',''),' ',''),'"','') AS [path_type]
+			DISTINCT REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [path_type]
 		FROM [imp].[StSJSONData]
 		CROSS APPLY STRING_SPLIT([path_taken], ',')
 		) t
@@ -115,7 +115,7 @@ BEGIN
 
 	-- [dwh].[DimItem]
 	INSERT INTO [dwh].[DimItem]
-	SELECT  
+	SELECT DISTINCT 
 		tt.[ItemName],
 		tt.[ItemType],
 		getdate(),
@@ -124,34 +124,60 @@ BEGIN
 	FROM 
 		(
 		SELECT 
-			distinct card_choices.[picked] AS [ItemName],
+			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(card_choices.[picked],'"',''),']',''),'[',''),' ',''),'\u0027s','s')  AS [ItemName],
 			'card' AS [ItemType]
 		FROM [imp].[StSJSONData] j
 		CROSS APPLY OPENJSON ([card_choices]) 
 		WITH ([picked] nvarchar(255)) AS card_choices
 		UNION ALL 
 		SELECT 
-			distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s')  AS [ItemName],
+			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s')  AS [ItemName],
 			'card' AS [ItemType]
 		FROM [imp].[StSJSONData]
 		CROSS APPLY STRING_SPLIT([master_deck], ',')
 		UNION ALL 
 		SELECT 
-			distinct [key] AS [ItemName],
+			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE([key],'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [ItemName],
 			'potion' AS [ItemType]
 		FROM [imp].[StSJSONData]
 		CROSS APPLY OPENJSON ([potions_obtained])
 		WITH ([key] nvarchar(255)) AS J	
 		UNION ALL 
 		SELECT 
-			distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,' "',''),']',''),'[',''),'"',''),'\u0027s','s') AS [ItemName],
+			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s')  AS [ItemName],
 			'relic' AS [ItemType]
 		FROM [imp].[StSJSONData]
 		CROSS APPLY STRING_SPLIT([relics], ',')	
+		UNION ALL 
+		SELECT 
+			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [ItemName],
+			'card' AS [ItemType]
+		FROM [imp].[StSJSONData] j
+		CROSS APPLY OPENJSON ([card_choices]) 
+		WITH (
+			[not_picked] nvarchar(max) AS JSON,
+			[floor] nvarchar(5)
+			) AS not_picked
+			CROSS APPLY STRING_SPLIT([not_picked], ',')
 		) tt
 	LEFT OUTER JOIN [dwh].[DimItem] s ON s.[ItemName] = tt.[ItemName] AND s.[ItemType] = tt.[ItemType]
 		WHERE s.[ItemName] is null
 		OR s.[ItemType] is null	
+
+	-- [dwh].[DimItemInteraction]
+	IF NOT EXISTS (SELECT [ItemInteractionName] FROM [dwh].[DimItemInteraction])
+	BEGIN 
+	INSERT INTO [dwh].[DimItemInteraction] ([ItemInteractionName],[ETLInsertedAt],[ETLUpdatedAt],[ETLUser])
+	VALUES
+	('potion_looted',getdate(),getdate(),SYSTEM_USER),
+	('relic_looted',getdate(),getdate(),SYSTEM_USER),
+	('card_picked',getdate(),getdate(),SYSTEM_USER),
+	('card_purged',getdate(),getdate(),SYSTEM_USER),
+	('item_purchased',getdate(),getdate(),SYSTEM_USER),
+	('card_not_picked',getdate(),getdate(),SYSTEM_USER),
+	('boss_relic_picked',getdate(),getdate(),SYSTEM_USER),
+	('boss_relic_not_picked',getdate(),getdate(),SYSTEM_USER)
+	END;
 
 	-- [dwh].[DimStartingBonus]
 	INSERT INTO [dwh].[DimStartingBonus]
@@ -178,5 +204,3 @@ BEGIN
 
 END
 GO
-
-

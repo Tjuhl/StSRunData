@@ -84,6 +84,9 @@
     <Build Include="imp\Schemas\imp.sql" />
     <Build Include="dwh\Tables\DimAscensionLevel.sql" />
     <Build Include="imp\StoredProcedures\spStSRunLoadFacts.sql" />
+    <Build Include="dwh\Tables\DimItemInteraction.sql" />
+    <Build Include="dwh\Tables\FactFloorEvent.sql" />
+    <Build Include="dwh\Tables\FactFloorItems.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SQL-Scripts.publish.xml" />

@@ -3,11 +3,11 @@
 	-- ids
 	PlayId nvarchar(36) not null, -- "play_id": "8f3a5379-95b2-4ade-b8c3-acae861e50a4",
 	BuildId int null, -- "build_version": "2018-08-02",
-	AscensionId int null, -- "ascension_level": 15,
+	AscensionLevelId int null, -- "ascension_level": 15,
 	CharacterId int null, -- "character_chosen": "IRONCLAD",	
 	StartingBonusId int null, -- "neow_bonus": "UPGRADE_CARD", "neow_cost": "NONE",
-	KilledById int null, -- "killed_by": "3 Darklings",
 	VictoryId int null, -- "victory": true,
+	KilledById int null, -- "killed_by": "3 Darklings",
 	-- measures
 	FloorReached int null, -- "floor_reached": 51,	
 	CampfireRests int null, -- "campfire_rested": 3,
@@ -16,7 +16,7 @@
 	FinalGold int null, -- "gold": 130,
 	PlayerExperience bigint null, -- "player_experience": 758607,
 	Score int null, -- "score": 1317,
-	PlayTimeSeconds int null, -- "playtime": 2936,	
+	PlayTimeMinutes int null, -- "playtime": 2936,	
 	WinRate float null, -- "win_rate": 0
 	CircletCount int null, -- "circlet_count": 0,
 	-- timestamps
