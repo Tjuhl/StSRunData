@@ -13,7 +13,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL-Scripts", "SQL-Scripts\
 EndProject
 Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "SSIS_Integration", "SSIS_Integration\SSIS_Integration.dtproj", "{1606C108-F050-4611-8723-262C9F20716B}"
 EndProject
-Project("{6870E480-7721-4708-BFB8-9AE898AA21B3}") = "SSAS_Tabular", "SSAS_Tabular\SSAS_Tabular.smproj", "{8CE414BB-95B2-4C99-9E03-51BA72086E22}"
+Project("{6870E480-7721-4708-BFB8-9AE898AA21B3}") = "StSRun", "StSRun\StSRun.smproj", "{8CE414BB-95B2-4C99-9E03-51BA72086E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
