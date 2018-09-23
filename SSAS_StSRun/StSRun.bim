@@ -19,9 +19,10 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "localhost;DWH",
           "Username": "TJUHL\\Tjuhl",
-          "EncryptConnection": false,
-          "PrivacySetting": "Private"
+          "EncryptConnection": false
         }
       }
     ],
@@ -32,7 +33,6 @@
           {
             "name": "PlayId",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "PlayId"
           },
           {
@@ -74,61 +74,51 @@
           {
             "name": "FloorReached",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "FloorReached"
           },
           {
             "name": "CampfireRests",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "CampfireRests"
           },
           {
             "name": "CampfireUpgrades",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "CampfireUpgrades"
           },
           {
             "name": "PurchasedPurges",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "PurchasedPurges"
           },
           {
             "name": "FinalGold",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "FinalGold"
           },
           {
             "name": "PlayerExperience",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "PlayerExperience"
           },
           {
             "name": "Score",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "Score"
           },
           {
             "name": "PlayTimeMinutes",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "PlayTimeMinutes"
           },
           {
             "name": "WinRate",
             "dataType": "double",
-            "isHidden": true,
             "sourceColumn": "WinRate"
           },
           {
             "name": "CircletCount",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "CircletCount"
           },
           {
@@ -155,13 +145,11 @@
           {
             "name": "ChoseSeed",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "ChoseSeed"
           },
           {
             "name": "IsAscensionMode",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "IsAscensionMode"
           },
           {
@@ -172,13 +160,11 @@
           {
             "name": "IsDaily",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "IsDaily"
           },
           {
             "name": "IsEndless",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "IsEndless"
           },
           {
@@ -189,7 +175,6 @@
           {
             "name": "IsTrial",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "IsTrial"
           },
           {
@@ -230,7 +215,7 @@
         "measures": [
           {
             "name": "AmountOfRuns",
-            "expression": "COUNT('dwh FactRun'[PlayId])"
+            "expression": "DISTINCTCOUNT('dwh FactRun'[PlayId])"
           },
           {
             "name": "AvgFloorReached",
@@ -249,7 +234,7 @@
             "expression": "SUM('dwh FactRun'[CampfireUpgrades])"
           },
           {
-            "name": "TotalPurchasedPurges",
+            "name": "TotalCardRemoves",
             "expression": "SUM('dwh FactRun'[PurchasedPurges])"
           },
           {
@@ -267,160 +252,6 @@
           {
             "name": "TotalPlaytimeMinutes",
             "expression": "SUM('dwh FactRun'[PlayTimeMinutes])"
-          },
-          {
-            "name": "AmountOfUniqueRuns",
-            "expression": "DISTINCTCOUNT('dwh FactRun'[PlayId])"
-          }
-        ]
-      },
-      {
-        "name": "dwh DimVictory",
-        "columns": [
-          {
-            "name": "VictoryId",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "VictoryId"
-          },
-          {
-            "name": "VictoryTF",
-            "dataType": "string",
-            "sourceColumn": "VictoryTF"
-          },
-          {
-            "name": "ETLInsertedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLInsertedAt"
-          },
-          {
-            "name": "ETLUpdatedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLUpdatedAt"
-          },
-          {
-            "name": "ETLUser",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ETLUser"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/localhost;DWH\",",
-                "    dwh_DimVictory = Source{[Schema=\"dwh\",Item=\"DimVictory\"]}[Data]",
-                "in",
-                "    dwh_DimVictory"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "dwh DimEncounter",
-        "columns": [
-          {
-            "name": "EncounterId",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "EncounterId"
-          },
-          {
-            "name": "EncounterName",
-            "dataType": "string",
-            "sourceColumn": "EncounterName"
-          },
-          {
-            "name": "ETLInsertedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLInsertedAt"
-          },
-          {
-            "name": "ETLUpdatedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLUpdatedAt"
-          },
-          {
-            "name": "ETLUser",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ETLUser"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/localhost;DWH\",",
-                "    dwh_DimEncounter = Source{[Schema=\"dwh\",Item=\"DimEncounter\"]}[Data]",
-                "in",
-                "    dwh_DimEncounter"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "dwh DimCharacter",
-        "columns": [
-          {
-            "name": "CharacterId",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "CharacterId"
-          },
-          {
-            "name": "CharacterChosen",
-            "dataType": "string",
-            "sourceColumn": "CharacterChosen"
-          },
-          {
-            "name": "ETLInsertedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLInsertedAt"
-          },
-          {
-            "name": "ETLUpdatedAt",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ETLUpdatedAt"
-          },
-          {
-            "name": "ETLUser",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ETLUser"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/localhost;DWH\",",
-                "    dwh_DimCharacter = Source{[Schema=\"dwh\",Item=\"DimCharacter\"]}[Data]",
-                "in",
-                "    dwh_DimCharacter"
-              ]
-            }
           }
         ]
       },
@@ -525,6 +356,56 @@
         ]
       },
       {
+        "name": "dwh DimCharacter",
+        "columns": [
+          {
+            "name": "CharacterId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CharacterId"
+          },
+          {
+            "name": "CharacterChosen",
+            "dataType": "string",
+            "sourceColumn": "CharacterChosen"
+          },
+          {
+            "name": "ETLInsertedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLInsertedAt"
+          },
+          {
+            "name": "ETLUpdatedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLUpdatedAt"
+          },
+          {
+            "name": "ETLUser",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ETLUser"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;DWH\",",
+                "    dwh_DimCharacter = Source{[Schema=\"dwh\",Item=\"DimCharacter\"]}[Data]",
+                "in",
+                "    dwh_DimCharacter"
+              ]
+            }
+          }
+        ]
+      },
+      {
         "name": "dwh DimStartingBonus",
         "columns": [
           {
@@ -578,50 +459,290 @@
             }
           }
         ]
+      },
+      {
+        "name": "dwh DimVictory",
+        "columns": [
+          {
+            "name": "VictoryId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "VictoryId"
+          },
+          {
+            "name": "VictoryTF",
+            "dataType": "string",
+            "sourceColumn": "VictoryTF"
+          },
+          {
+            "name": "ETLInsertedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLInsertedAt"
+          },
+          {
+            "name": "ETLUpdatedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLUpdatedAt"
+          },
+          {
+            "name": "ETLUser",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ETLUser"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;DWH\",",
+                "    dwh_DimVictory = Source{[Schema=\"dwh\",Item=\"DimVictory\"]}[Data]",
+                "in",
+                "    dwh_DimVictory"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dwh DimEncounter",
+        "columns": [
+          {
+            "name": "EncounterId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "EncounterId"
+          },
+          {
+            "name": "EncounterName",
+            "dataType": "string",
+            "sourceColumn": "EncounterName"
+          },
+          {
+            "name": "ETLInsertedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLInsertedAt"
+          },
+          {
+            "name": "ETLUpdatedAt",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ETLUpdatedAt"
+          },
+          {
+            "name": "ETLUser",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ETLUser"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;DWH\",",
+                "    dwh_DimEncounter = Source{[Schema=\"dwh\",Item=\"DimEncounter\"]}[Data]",
+                "in",
+                "    dwh_DimEncounter"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dwh DimDate",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "DateKey",
+            "dataType": "int64",
+            "sourceColumn": "DateKey"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "isKey": true,
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "Day",
+            "dataType": "int64",
+            "sourceColumn": "Day"
+          },
+          {
+            "name": "DaySuffix",
+            "dataType": "string",
+            "sourceColumn": "DaySuffix"
+          },
+          {
+            "name": "Weekday",
+            "dataType": "int64",
+            "sourceColumn": "Weekday"
+          },
+          {
+            "name": "WeekDayName",
+            "dataType": "string",
+            "sourceColumn": "WeekDayName"
+          },
+          {
+            "name": "WeekDayName_Short",
+            "dataType": "string",
+            "sourceColumn": "WeekDayName_Short"
+          },
+          {
+            "name": "WeekDayName_FirstLetter",
+            "dataType": "string",
+            "sourceColumn": "WeekDayName_FirstLetter"
+          },
+          {
+            "name": "DOWInMonth",
+            "dataType": "int64",
+            "sourceColumn": "DOWInMonth"
+          },
+          {
+            "name": "DayOfYear",
+            "dataType": "int64",
+            "sourceColumn": "DayOfYear"
+          },
+          {
+            "name": "WeekOfMonth",
+            "dataType": "int64",
+            "sourceColumn": "WeekOfMonth"
+          },
+          {
+            "name": "WeekOfYear",
+            "dataType": "int64",
+            "sourceColumn": "WeekOfYear"
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "sourceColumn": "Month"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName"
+          },
+          {
+            "name": "MonthName_Short",
+            "dataType": "string",
+            "sourceColumn": "MonthName_Short"
+          },
+          {
+            "name": "MonthName_FirstLetter",
+            "dataType": "string",
+            "sourceColumn": "MonthName_FirstLetter"
+          },
+          {
+            "name": "Quarter",
+            "dataType": "int64",
+            "sourceColumn": "Quarter"
+          },
+          {
+            "name": "QuarterName",
+            "dataType": "string",
+            "sourceColumn": "QuarterName"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year"
+          },
+          {
+            "name": "MMYYYY",
+            "dataType": "string",
+            "sourceColumn": "MMYYYY"
+          },
+          {
+            "name": "MonthYear",
+            "dataType": "string",
+            "sourceColumn": "MonthYear"
+          },
+          {
+            "name": "IsWeekend",
+            "dataType": "boolean",
+            "sourceColumn": "IsWeekend"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;DWH\",",
+                "    dwh_DimDate = Source{[Schema=\"dwh\",Item=\"DimDate\"]}[Data]",
+                "in",
+                "    dwh_DimDate"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
       {
-        "name": "1b617c05-fc81-4a9f-8b14-378e803740ab",
+        "name": "1e6fe2e2-07b0-463c-bd0e-4c27dfb07f67",
         "fromTable": "dwh FactRun",
-        "fromColumn": "VictoryId",
-        "toTable": "dwh DimVictory",
-        "toColumn": "VictoryId"
+        "fromColumn": "BuildId",
+        "toTable": "dwh DimBuildVersion",
+        "toColumn": "BuildId"
       },
       {
-        "name": "25a77405-c36d-4bc2-b81d-3d45532a417f",
-        "fromTable": "dwh FactRun",
-        "fromColumn": "KilledById",
-        "toTable": "dwh DimEncounter",
-        "toColumn": "EncounterId"
-      },
-      {
-        "name": "0eaec9bd-7fcf-43fa-a40a-da2568158caf",
-        "fromTable": "dwh FactRun",
-        "fromColumn": "CharacterId",
-        "toTable": "dwh DimCharacter",
-        "toColumn": "CharacterId"
-      },
-      {
-        "name": "3d1a1794-7281-4acb-9e6d-188f4db37eb1",
-        "fromTable": "dwh FactRun",
-        "fromColumn": "StartingBonusId",
-        "toTable": "dwh DimStartingBonus",
-        "toColumn": "StartingBonusId"
-      },
-      {
-        "name": "059cb1ad-3708-4363-8b9a-28ace125b8ac",
+        "name": "42cea90c-2068-4339-9a6e-1a0f8534a7f8",
         "fromTable": "dwh FactRun",
         "fromColumn": "AscensionLevelId",
         "toTable": "dwh DimAscensionLevel",
         "toColumn": "AscensionLevelId"
       },
       {
-        "name": "b0cc34bb-d9ee-43a6-8d98-9f1654029b72",
+        "name": "c2c0fad4-71e6-40b4-8bc9-f45e556d9f54",
         "fromTable": "dwh FactRun",
-        "fromColumn": "BuildId",
-        "toTable": "dwh DimBuildVersion",
-        "toColumn": "BuildId"
+        "fromColumn": "CharacterId",
+        "toTable": "dwh DimCharacter",
+        "toColumn": "CharacterId"
+      },
+      {
+        "name": "4059b072-451e-411f-803d-97c88ded9e68",
+        "fromTable": "dwh FactRun",
+        "fromColumn": "StartingBonusId",
+        "toTable": "dwh DimStartingBonus",
+        "toColumn": "StartingBonusId"
+      },
+      {
+        "name": "7a0c3103-9068-47d4-86f7-1dcb33f76385",
+        "fromTable": "dwh FactRun",
+        "fromColumn": "VictoryId",
+        "toTable": "dwh DimVictory",
+        "toColumn": "VictoryId"
+      },
+      {
+        "name": "134806cf-9c2e-44fe-b180-73f28fed9cfb",
+        "fromTable": "dwh FactRun",
+        "fromColumn": "KilledById",
+        "toTable": "dwh DimEncounter",
+        "toColumn": "EncounterId"
+      },
+      {
+        "name": "1b09ff9b-8470-4c84-8e4e-948e26082c73",
+        "fromTable": "dwh FactRun",
+        "fromColumn": "RunStartedAt",
+        "toTable": "dwh DimDate",
+        "toColumn": "DateKey"
       }
     ],
     "annotations": [

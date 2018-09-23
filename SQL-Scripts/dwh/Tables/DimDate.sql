@@ -1,19 +1,24 @@
-﻿CREATE TABLE [dwh].[DimDate]
-(
-	[DateId] [bigint] IDENTITY(1,1) NOT NULL,
-	[DateKey] [int] NULL,
-	[Date] [datetime] NULL,
-	[Year] [int] NULL,
-	[MonthNumber] [tinyint] NULL,
-	[MonthShort] [varchar](3) NULL,
-	[Month] [varchar](10) NULL,
-	[WeekdayNumber] [tinyint] NULL,
-	[WeekdayShort] [varchar](3) NULL,
-	[Weekday] [varchar](10) NULL,
-	[CalendarWeek] [tinyint] NULL
-CONSTRAINT [PK_DimDate] PRIMARY KEY CLUSTERED
-(
-	[DateId] ASC
-)
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+﻿CREATE TABLE dwh.DimDate (
+   DateKey INT NOT NULL PRIMARY KEY,
+   [Date] DATE NOT NULL,
+   [Day] TINYINT NOT NULL,
+   [DaySuffix] CHAR(2) NOT NULL,
+   [Weekday] TINYINT NOT NULL,
+   [WeekDayName] VARCHAR(10) NOT NULL,
+   [WeekDayName_Short] CHAR(3) NOT NULL,
+   [WeekDayName_FirstLetter] CHAR(1) NOT NULL,
+   [DOWInMonth] TINYINT NOT NULL,
+   [DayOfYear] SMALLINT NOT NULL,
+   [WeekOfMonth] TINYINT NOT NULL,
+   [WeekOfYear] TINYINT NOT NULL,
+   [Month] TINYINT NOT NULL,
+   [MonthName] VARCHAR(10) NOT NULL,
+   [MonthName_Short] CHAR(3) NOT NULL,
+   [MonthName_FirstLetter] CHAR(1) NOT NULL,
+   [Quarter] TINYINT NOT NULL,
+   [QuarterName] VARCHAR(6) NOT NULL,
+   [Year] INT NOT NULL,
+   [MMYYYY] CHAR(6) NOT NULL,
+   [MonthYear] CHAR(7) NOT NULL,
+   IsWeekend BIT NOT NULL,
+   )
