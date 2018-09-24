@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="106"
-  DTS:VersionGUID="{5BAC7CA7-9223-4004-95C0-4BF3BA426319}">
+  DTS:VersionBuild="108"
+  DTS:VersionGUID="{4E192476-5218-4040-8BD4-E3C4083557E7}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -23,7 +23,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="StSRunDirectory">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Games\Steam\steamapps\common\SlayTheSpire\runs\</DTS:VariableValue>
+        DTS:DataType="8">C:\Projects\StSRuns\JorbsStsRuns</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -63,7 +63,7 @@
             <DTS:ObjectData>
               <ForEachFileEnumeratorProperties>
                 <FEFEProperty
-                  Folder="C:\Games\Steam\steamapps\common\SlayTheSpire\runs\" />
+                  Folder="C:\Projects\StSRuns\JorbsStsRuns" />
                 <FEFEProperty
                   FileSpec="*.run" />
                 <FEFEProperty
