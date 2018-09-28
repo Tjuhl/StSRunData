@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="108"
-  DTS:VersionGUID="{4E192476-5218-4040-8BD4-E3C4083557E7}">
+  DTS:VersionBuild="109"
+  DTS:VersionGUID="{5D4DFD82-0969-437C-8CCB-27C06759449C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -313,7 +313,6 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\truncate DWH tables"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Task &quot;SQL ausführen&quot;"
-      DTS:Disabled="True"
       DTS:DTSID="{5126DD97-0ED4-4E4D-AFCF-5606DE104F5E}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
