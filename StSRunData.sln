@@ -15,7 +15,7 @@ Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "SSIS_Integration", "SSIS_In
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerBI", "PowerBI", "{B2460B5D-A113-47B3-9DD8-929891CC2C9B}"
 	ProjectSection(SolutionItems) = preProject
-		PowerBI_Reports\StSRuns2_Jorbs.pbix = PowerBI_Reports\StSRuns2_Jorbs.pbix
+		PowerBI_Reports\StSData_Jorbs.pbix = PowerBI_Reports\StSData_Jorbs.pbix
 	EndProjectSection
 EndProject
 Global

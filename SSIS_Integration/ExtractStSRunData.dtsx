@@ -7,12 +7,12 @@
   DTS:CreatorName="DESKTOP-M9ABD91\Tjuhl"
   DTS:DTSID="{2982872C-FCB0-4AE0-A3C4-183331CEED48}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="14.0.3002.107"
+  DTS:LastModifiedProductVersion="15.0.0900.30"
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="109"
-  DTS:VersionGUID="{5D4DFD82-0969-437C-8CCB-27C06759449C}">
+  DTS:VersionBuild="111"
+  DTS:VersionGUID="{C7F9F397-5508-4D46-97E7-F7D25F955DF2}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -23,7 +23,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="StSRunDirectory">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Projects\StSRuns\JorbsStsRuns</DTS:VariableValue>
+        DTS:DataType="8">C:\Projects\StSRuns\JorbsStSRuns_GoogleDrive</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -63,7 +63,7 @@
             <DTS:ObjectData>
               <ForEachFileEnumeratorProperties>
                 <FEFEProperty
-                  Folder="C:\Projects\StSRuns\JorbsStsRuns" />
+                  Folder="C:\Projects\StSRuns\JorbsStSRuns_GoogleDrive" />
                 <FEFEProperty
                   FileSpec="*.run" />
                 <FEFEProperty
@@ -313,6 +313,7 @@ END CATCH;"</DTS:PropertyExpression>
       DTS:refId="Package\truncate DWH tables"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Task &quot;SQL ausführen&quot;"
+      DTS:Disabled="True"
       DTS:DTSID="{5126DD97-0ED4-4E4D-AFCF-5606DE104F5E}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
