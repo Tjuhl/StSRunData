@@ -296,7 +296,7 @@ BEGIN
 	-- dwh.FactFloorItem
 	SELECT 
 		j.[play_id] AS [PlayId],
-		IFNULL(floor_path.[floor],0) AS [Floor],
+		ISNULL(floor_path.[floor],0) AS [Floor],
 		floor_path.[PathId],
 		i.[ItemId],
 		CASE 
