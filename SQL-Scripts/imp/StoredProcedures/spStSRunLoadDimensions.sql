@@ -176,7 +176,9 @@ BEGIN
 	('item_purchased',getdate(),getdate(),SYSTEM_USER),
 	('card_not_picked',getdate(),getdate(),SYSTEM_USER),
 	('boss_relic_picked',getdate(),getdate(),SYSTEM_USER),
-	('boss_relic_not_picked',getdate(),getdate(),SYSTEM_USER)
+	('boss_relic_not_picked',getdate(),getdate(),SYSTEM_USER),
+	('looted_from_event',getdate(),getdate(),SYSTEM_USER),
+	('got_start_relic',getdate(),getdate(),SYSTEM_USER)
 	END;
 
 	-- [dwh].[DimStartingBonus]

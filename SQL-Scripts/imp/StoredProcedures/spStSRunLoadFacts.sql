@@ -296,10 +296,17 @@ BEGIN
 	-- dwh.FactFloorItem
 	SELECT 
 		j.[play_id] AS [PlayId],
-		floor_path.[floor] AS [Floor],
+		IFNULL(floor_path.[floor],0) AS [Floor],
 		floor_path.[PathId],
 		i.[ItemId],
-		ia.[ItemInteractionId],
+		CASE 
+			-- start relic
+			WHEN i.[ItemName] IN ('BurningBlood','CrackedCore','RingoftheSnake') THEN 10 
+			-- items obtained through events
+			WHEN ia.[ItemInteractionName] IS NULL THEN 9
+			-- items obtained through item interactions like purchase, purge, loot
+			ELSE ia.[ItemInteractionId] 
+		END AS [ItemInteractionId],
 		getdate() AS [ETLInsertedAt],
 		getdate() AS [ETLUpdatedAt],
 		system_user AS [ETLUser]	
@@ -456,8 +463,8 @@ BEGIN
 			[key] nvarchar(255)
 		) AS potions_obtained 
 	) AS item ON item.[play_id] = j.[play_id] AND item.[Floor] = floor_path.[floor]
-	INNER JOIN [dwh].[DimItem] i ON i.[ItemName] = item.[ItemName]
-	INNER JOIN [dwh].[DimItemInteraction] ia ON ia.[ItemInteractionName] = item.[ItemInteraction]
+	LEFT JOIN [dwh].[DimItem] i ON i.[ItemName] = item.[ItemName]
+	LEFT JOIN [dwh].[DimItemInteraction] ia ON ia.[ItemInteractionName] = item.[ItemInteraction]
 	LEFT OUTER JOIN [dwh].[FactFloorItem] t ON t.[PlayId] = j.[play_id]
 		WHERE t.[PlayId] is null
 END;
