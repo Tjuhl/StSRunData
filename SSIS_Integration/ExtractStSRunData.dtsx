@@ -11,8 +11,8 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="112"
-  DTS:VersionGUID="{E9DA1F61-AE9E-417D-BDDD-F345231F8B77}">
+  DTS:VersionBuild="115"
+  DTS:VersionGUID="{0C676933-9B8B-43FF-BD04-C0B4BA9F0F2E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -323,7 +323,7 @@ END CATCH;"</DTS:PropertyExpression>
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
-          SQLTask:SqlStatementSource="TRUNCATE TABLE [dwh].[DimAscensionLevel]&#xA;TRUNCATE TABLE [dwh].[DimBuildVersion]&#xA;TRUNCATE TABLE [dwh].[DimCampfire]&#xA;TRUNCATE TABLE [dwh].[DimCharacter]&#xA;TRUNCATE TABLE [dwh].[DimEncounter]&#xA;TRUNCATE TABLE [dwh].[DimEvent]&#xA;TRUNCATE TABLE [dwh].[DimItem]&#xA;TRUNCATE TABLE [dwh].[DimItemInteraction]&#xA;TRUNCATE TABLE [dwh].[DimPath]&#xA;TRUNCATE TABLE [dwh].[DimStartingBonus]&#xA;TRUNCATE TABLE [dwh].[DimVictory]&#xA;TRUNCATE TABLE [dwh].[FactFloor]&#xA;TRUNCATE TABLE [dwh].[FactRun]&#xA;TRUNCATE TABLE [dwh].[FactFloorEvent]&#xA;TRUNCATE TABLE [dwh].[FactFloorItem]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [dwh].[DimAscensionLevel]&#xA;TRUNCATE TABLE [dwh].[DimBuildVersion]&#xA;TRUNCATE TABLE [dwh].[DimCampfire]&#xA;TRUNCATE TABLE [dwh].[DimCharacter]&#xA;TRUNCATE TABLE [dwh].[DimEncounter]&#xA;TRUNCATE TABLE [dwh].[DimEventChoice]&#xA;TRUNCATE TABLE [dwh].[DimItem]&#xA;TRUNCATE TABLE [dwh].[DimItemInteraction]&#xA;TRUNCATE TABLE [dwh].[DimPath]&#xA;TRUNCATE TABLE [dwh].[DimStartingBonus]&#xA;TRUNCATE TABLE [dwh].[DimVictory]&#xA;TRUNCATE TABLE [dwh].[FactFloor]&#xA;TRUNCATE TABLE [dwh].[FactRun]&#xA;TRUNCATE TABLE [dwh].[FactFloorEvent]&#xA;TRUNCATE TABLE [dwh].[FactFloorItem]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable

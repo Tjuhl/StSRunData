@@ -2,6 +2,7 @@
 (
 	EncounterId int identity(1,1) not null,
 	EncounterName nvarchar(255) null, 
+	EncounterType nvarchar(10) null,
 	ETLInsertedAt datetime null,
 	ETLUpdatedAt datetime null,
 	ETLUser nvarchar(50) null

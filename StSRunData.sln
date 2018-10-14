@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevelopmentNotes", "DevelopmentNotes", "{6B93B2F5-1A05-45E6-889E-A44E32265E40}"
 	ProjectSection(SolutionItems) = preProject
 		DevelopmentNotes.txt = DevelopmentNotes.txt
-		StSRunDataModel.txt = StSRunDataModel.txt
 	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL-Scripts", "SQL-Scripts\SQL-Scripts.sqlproj", "{88DA4425-7C03-4CBA-B264-C99814EF1377}"

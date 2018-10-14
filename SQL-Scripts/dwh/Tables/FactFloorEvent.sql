@@ -4,7 +4,7 @@
 	[Floor] int null,
 	[PathId] int null,
 	[EncounterId] int null,
-	[EventId] int null,
+	[EventChoiceId] int null,
 	[DamageTaken] int null,
 	[TurnsTaken] int null,
 	[ETLInsertedAt] datetime null,

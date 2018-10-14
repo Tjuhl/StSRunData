@@ -1,253 +1,227 @@
-﻿CREATE PROCEDURE [imp].[spStSRunLoadDimensions]
-AS 
+﻿CREATE PROCEDURE [imp].[spStSRunLoadDimensions] AS
 
 BEGIN 
-	-- [dwh].[DimAscensionLevel]
-	INSERT INTO [dwh].[DimAscensionLevel]
-	SELECT 
-		distinct j.[ascension_level],
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData] j
-	LEFT OUTER JOIN [dwh].[DimAscensionLevel] s ON s.[AscensionLevel] = j.[ascension_level]
-		WHERE s.[AscensionLevel] is null
+	
+-- [dwh].[DimAscensionLevel]
+INSERT INTO [dwh].[DimAscensionLevel]
+SELECT 
+	distinct [ascension_level],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
 
-	-- [dwh].[DimBuildVersion]
-	INSERT INTO [dwh].[DimBuildVersion]
-	SELECT 
-		distinct j.[build_version],
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData] j
-	LEFT JOIN [dwh].[DimBuildVersion] s ON s.[BuildVersion] = j.[build_version]
-		WHERE s.[BuildVersion] is null
+-- [dwh].[DimBuildVersion]
+INSERT INTO [dwh].[DimBuildVersion]
+SELECT 
+	distinct [build_version],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
 
-	-- [dwh].[DimCampfire]
-	INSERT INTO [dwh].[DimCampfire]
+-- [dwh].[DimCharacter]
+INSERT INTO [dwh].[DimCharacter]
+SELECT 
+	distinct [character_chosen],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData] 
+
+-- [dwh].[DimEncounter]
+INSERT INTO [dwh].[DimEncounter]
+-- encounters
+SELECT 
+	distinct [enemies],
+	'encounter' AS [EncounterType],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
+CROSS APPLY OPENJSON ([damage_taken])
+WITH (
+	[enemies] nvarchar(255)	
+	)
+UNION ALL
+-- events
+SELECT 
+	distinct [event_name],
+	'event' AS [EncounterType],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
+CROSS APPLY OPENJSON ([event_choices])
+WITH (
+	[event_name] nvarchar(255)	
+	)
+
+-- [dwh].[DimEventChoice]
+INSERT INTO [dwh].[DimEventChoice]
+SELECT 
+	distinct [event_name], 
+	[player_choice],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
+CROSS APPLY OPENJSON ([event_choices])
+WITH (
+	[event_name] nvarchar(255),
+	[player_choice] nvarchar(255)
+)
+
+-- [dwh].[DimPath]
+INSERT INTO [dwh].[DimPath]
+SELECT 
+	t.[path_type],
+	CASE WHEN t.[path_type] = '$' THEN 'shop' 
+	WHEN t.[path_type] = 'T' THEN 'treasure' 
+	WHEN t.[path_type] = 'E' THEN 'elite' 
+	WHEN t.[path_type] = '?' THEN 'event' 
+	WHEN t.[path_type] = 'R' THEN 'campfire' 
+	WHEN t.[path_type] = 'M' THEN 'enemy' 
+	WHEN t.[path_type] = 'BOSS' THEN 'boss'
+	WHEN t.[path_type] = 'brel' THEN 'boss_relic' 
+	ELSE 'unknown'
+	END AS [path_name],
+	getdate(),
+	getdate(),
+	system_user	
+FROM 
+	(	
 	SELECT 
-		distinct j.[data],	
-		j.[key],
-		getdate() as [ETLInsertedAt],
-		getdate() as [ETLUpdatedAt],
-		system_user as [ETLUser]
+		DISTINCT REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [path_type]
 	FROM [imp].[StSJSONData]
-	CROSS APPLY OPENJSON ([campfire_choices])
-	WITH (
-		[data] nvarchar(255),     
-		[key] nvarchar(20)
-	) AS J
-	LEFT JOIN [dwh].[DimCampfire] s ON s.[CampfireChoice] = j.[data] AND s.[CampfireAction] = j.[key]
-		WHERE s.[CampfireChoice] is null
-		AND s.[CampfireAction] is null
+	CROSS APPLY STRING_SPLIT([path_taken], ',')
+	) t
 
-	-- [dwh].[DimCharacter]
-	INSERT INTO [dwh].[DimCharacter]
+-- [dwh].[DimItem]
+INSERT INTO [dwh].[DimItem]
+SELECT DISTINCT 
+	tt.[ItemName],
+	tt.[ItemType],
+	getdate(),
+	getdate(),
+	system_user
+FROM 
+	(
+	-- cards in master deck at end of run
 	SELECT 
-		distinct [character_chosen],
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData] 
-	LEFT JOIN [dwh].[DimCharacter] s ON s.[CharacterChosen] = [character_chosen]
-		WHERE s.[CharacterChosen] is null
-
-	-- [dwh].[DimEncounter]
-	INSERT INTO [dwh].[DimEncounter]
-	SELECT 
-		distinct [enemies], 
-		getdate(),
-		getdate(),
-		system_user
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'card' AS [ItemType]
 	FROM [imp].[StSJSONData]
-	CROSS APPLY OPENJSON ([damage_taken])
-	WITH (
-		[enemies] nvarchar(255)	
-	) AS J
-	LEFT JOIN [dwh].[DimEncounter] s ON s.[EncounterName] = j.[enemies]
-		WHERE s.[EncounterName] is null
-
-	-- [dwh].[DimEvent]
-	INSERT INTO [dwh].[DimEvent]
+	CROSS APPLY STRING_SPLIT([master_deck], ',')
+		WHERE value != '[]'
+	UNION ALL
+	-- cards picked
 	SELECT 
-		distinct [event_name], 
-		[player_choice],
-		getdate(),
-		getdate(),
-		system_user
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(card_choices.[picked],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'card' AS [ItemType]
 	FROM [imp].[StSJSONData]
-	CROSS APPLY OPENJSON ([event_choices])
+	CROSS APPLY OPENJSON ([card_choices]) 
+	WITH ([picked] nvarchar(255)) AS card_choices
+		WHERE card_choices.[picked] != '[]'
+	UNION ALL 
+	-- cards not picked
+	SELECT 
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'card' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY OPENJSON ([card_choices]) 
 	WITH (
-		[event_name] nvarchar(255),
-		[player_choice] nvarchar(255)
-	) AS J
-	LEFT JOIN [dwh].[DimEvent] s ON s.[EventName] = j.[event_name] AND s.[PlayerChoice] = j.[player_choice]
-		WHERE s.[EventName] is null
-
-	-- [dwh].[DimPath]
-	INSERT INTO [dwh].[DimPath]
-	SELECT 
-		t.[path_type],
-		CASE WHEN t.[path_type] = '$' THEN 'shop' 
-		WHEN t.[path_type] = 'T' THEN 'treasure' 
-		WHEN t.[path_type] = 'E' THEN 'elite' 
-		WHEN t.[path_type] = '?' THEN 'event' 
-		WHEN t.[path_type] = 'R' THEN 'campfire' 
-		WHEN t.[path_type] = 'M' THEN 'enemy' 
-		WHEN t.[path_type] = 'BOSS' THEN 'boss'
-		WHEN t.[path_type] = 'brel' THEN 'boss_relic' 
-		ELSE 'unknown'
-		END AS [path_name],
-		getdate(),
-		getdate(),
-		system_user	
-	FROM 
-		(	
-		SELECT 
-			DISTINCT REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [path_type]
-		FROM [imp].[StSJSONData]
-		CROSS APPLY STRING_SPLIT([path_taken], ',')
-		) t
-	LEFT JOIN [dwh].[DimPath] s ON s.[PathType] = t.[path_type]
-		WHERE s.[PathType] is null
-		OR s.[PathName] is null
-
-	-- [dwh].[DimItem]
-	INSERT INTO [dwh].[DimItem]
-	SELECT DISTINCT 
-		tt.[ItemName],
-		tt.[ItemType],
-		getdate(),
-		getdate(),
-		system_user
-	FROM 
-		(
-		-- cards in master deck at end of run
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'card' AS [ItemType]
-		FROM [imp].[StSJSONData]
-		CROSS APPLY STRING_SPLIT([master_deck], ',')
+		[not_picked] nvarchar(max) AS JSON
+		) AS not_picked
+		CROSS APPLY STRING_SPLIT([not_picked], ',')
 			WHERE value != '[]'
-		UNION ALL
-		-- cards picked
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(card_choices.[picked],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'card' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY OPENJSON ([card_choices]) 
-		WITH ([picked] nvarchar(255)) AS card_choices
-			WHERE card_choices.[picked] != '[]'
-		UNION ALL 
-		-- cards not picked
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'card' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY OPENJSON ([card_choices]) 
-		WITH (
-			[not_picked] nvarchar(max) AS JSON
-			) AS not_picked
-			CROSS APPLY STRING_SPLIT([not_picked], ',')
-				WHERE value != '[]'
-		UNION ALL 
-		-- cards purged
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'card' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY STRING_SPLIT([items_purged], ',')
-			WHERE value != '[]'
-		UNION ALL 
-		-- relics at end of run
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'relic' AS [ItemType]
-		FROM [imp].[StSJSONData]
-		CROSS APPLY STRING_SPLIT([relics], ',')	
-			WHERE value != '[]'
-		UNION ALL
-		-- relics obtained 
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(relics_obtained.[key],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'relic' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY OPENJSON ([relics_obtained]) 
-		WITH ([key] nvarchar(255)) AS relics_obtained 
-			WHERE relics_obtained.[key] != '[]'
-		UNION ALL 
-		-- boss relics picked
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(boss_relics_picked.[picked],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'relic' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY OPENJSON ([boss_relics]) 
-		WITH ([picked] nvarchar(255)) AS boss_relics_picked
-			WHERE boss_relics_picked.[picked] != '[]'
-		UNION ALL 
-		-- boss relics not picked
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'relic' AS [ItemType]
-		FROM [imp].[StSJSONData] j
-		CROSS APPLY OPENJSON ([boss_relics]) 
-		WITH ([not_picked] nvarchar(max) AS JSON) AS not_picked
-			CROSS APPLY STRING_SPLIT([not_picked], ',')
-				WHERE value != '[]'
-		UNION ALL 
-		-- potions looted
-		SELECT 
-			REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE([key],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
-			'potion' AS [ItemType]
-		FROM [imp].[StSJSONData]
-		CROSS APPLY OPENJSON ([potions_obtained])
-		WITH ([key] nvarchar(255)) AS J	
-			WHERE [key] != '[]'
-		) tt
-	LEFT JOIN [dwh].[DimItem] s ON s.[ItemName] = tt.[ItemName] AND s.[ItemType] = tt.[ItemType]
-		WHERE s.[ItemName] is null
-		OR s.[ItemType] is null
-
-	-- [dwh].[DimItemInteraction]
-	IF NOT EXISTS (SELECT [ItemInteractionName] FROM [dwh].[DimItemInteraction])
-	BEGIN 
-	INSERT INTO [dwh].[DimItemInteraction] ([ItemInteractionName],[ETLInsertedAt],[ETLUpdatedAt],[ETLUser])
-	VALUES
-	('potion_looted',getdate(),getdate(),SYSTEM_USER),
-	('relic_looted',getdate(),getdate(),SYSTEM_USER),
-	('card_picked',getdate(),getdate(),SYSTEM_USER),
-	('card_purged',getdate(),getdate(),SYSTEM_USER),
-	('item_purchased',getdate(),getdate(),SYSTEM_USER),
-	('card_not_picked',getdate(),getdate(),SYSTEM_USER),
-	('boss_relic_picked',getdate(),getdate(),SYSTEM_USER),
-	('boss_relic_not_picked',getdate(),getdate(),SYSTEM_USER),
-	('looted_from_event',getdate(),getdate(),SYSTEM_USER),
-	('got_start_relic',getdate(),getdate(),SYSTEM_USER)
-	END;
-
-	-- [dwh].[DimStartingBonus]
-	INSERT INTO [dwh].[DimStartingBonus]
+	UNION ALL 
+	-- cards purged
 	SELECT 
-		distinct [neow_bonus], 
-		[neow_cost],
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData] 
-	LEFT JOIN [dwh].[DimStartingBonus] s ON s.[StartingBonusName] = [neow_bonus] AND s.[StartingBonusCost] = [neow_cost]
-		WHERE s.[StartingBonusName] is null
-
-	-- [dwh].[DimVictory]
-	INSERT INTO [dwh].[DimVictory]
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'card' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY STRING_SPLIT([items_purged], ',')
+		WHERE value != '[]'
+	UNION ALL 
+	-- relics at end of run
 	SELECT 
-		distinct [victory],
-		getdate(),
-		getdate(),
-		system_user
-	FROM [imp].[StSJSONData] 
-	LEFT JOIN [dwh].[DimVictory] s ON s.[VictoryTF] = [victory]
-		WHERE s.[VictoryTF] is null
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'relic' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY STRING_SPLIT([relics], ',')	
+		WHERE value != '[]'
+	UNION ALL
+	-- relics obtained 
+	SELECT 
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(relics_obtained.[key],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'relic' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY OPENJSON ([relics_obtained]) 
+	WITH ([key] nvarchar(255)) AS relics_obtained 
+		WHERE relics_obtained.[key] != '[]'
+	UNION ALL 
+	-- boss relics picked
+	SELECT 
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(boss_relics_picked.[picked],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'relic' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY OPENJSON ([boss_relics]) 
+	WITH ([picked] nvarchar(255)) AS boss_relics_picked
+		WHERE boss_relics_picked.[picked] != '[]'
+	UNION ALL 
+	-- boss relics not picked
+	SELECT 
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'relic' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY OPENJSON ([boss_relics]) 
+	WITH ([not_picked] nvarchar(max) AS JSON) AS not_picked
+		CROSS APPLY STRING_SPLIT([not_picked], ',')
+			WHERE value != '[]'
+	UNION ALL 
+	-- potions looted
+	SELECT 
+		REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE([key],'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
+		'potion' AS [ItemType]
+	FROM [imp].[StSJSONData]
+	CROSS APPLY OPENJSON ([potions_obtained])
+	WITH ([key] nvarchar(255)) AS J	
+		WHERE [key] != '[]'
+	) tt
+
+-- [dwh].[DimItemInteraction]
+INSERT INTO [dwh].[DimItemInteraction] ([ItemInteractionName],[ETLInsertedAt],[ETLUpdatedAt],[ETLUser])
+VALUES
+('potion_looted',getdate(),getdate(),SYSTEM_USER),
+('relic_looted',getdate(),getdate(),SYSTEM_USER),
+('card_picked',getdate(),getdate(),SYSTEM_USER),
+('card_purged',getdate(),getdate(),SYSTEM_USER),
+('item_purchased',getdate(),getdate(),SYSTEM_USER),
+('card_not_picked',getdate(),getdate(),SYSTEM_USER),
+('boss_relic_picked',getdate(),getdate(),SYSTEM_USER),
+('boss_relic_not_picked',getdate(),getdate(),SYSTEM_USER),
+('looted_from_event',getdate(),getdate(),SYSTEM_USER),
+('starter_relic',getdate(),getdate(),SYSTEM_USER),
+('starter_card',getdate(),getdate(),SYSTEM_USER)
+
+-- [dwh].[DimStartingBonus]
+INSERT INTO [dwh].[DimStartingBonus]
+SELECT 
+	distinct [neow_bonus], 
+	[neow_cost],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
+
+-- [dwh].[DimVictory]
+INSERT INTO [dwh].[DimVictory]
+SELECT 
+	distinct [victory],
+	getdate(),
+	getdate(),
+	system_user
+FROM [imp].[StSJSONData]
 
 END
-GO

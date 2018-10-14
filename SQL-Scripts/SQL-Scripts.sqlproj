@@ -73,7 +73,7 @@
     <Build Include="dwh\Tables\DimItem.sql" />
     <Build Include="dwh\Tables\DimCharacater.sql" />
     <Build Include="dwh\Tables\DimEncounter.sql" />
-    <Build Include="dwh\Tables\DimEvent.sql" />
+    <Build Include="dwh\Tables\DimEventChoice.sql" />
     <Build Include="dwh\Tables\DimPath.sql" />
     <Build Include="dwh\Tables\DimStartingBonus.sql" />
     <Build Include="dwh\Tables\DimVictory.sql" />

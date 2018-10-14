@@ -4,12 +4,14 @@ DEVELOPMENT GOALS
 MILESTONES
 * read sample run JSON file and store to database - done
 * read and store StS run data consisting of all JSON files from target directory - done
-* transform JSON data in database
+* transform JSON data in database - done
 ** load dimension tables - done
 ** load fact tables for run data - done
-** load fact table for floor choices
-* develop tabular cube with appropriate data model
-* make data accessible through PowerBI or Tableau Public
+** load fact table for floor choices - done
+* load JoINrbs data into data model - done
+* automate data sync via Google Drive - done
+* make data accessible through PowerBI - done
+* automate data load via SQL Server Agent jobs 
 
 NOTES
 
@@ -18,7 +20,12 @@ RESOURCES
 * string_split https://docs.microsoft.com/en-us/sql/t-sql/functions/string-split-transact-sql?view=sql-server-2017
 * openjson https://docs.microsoft.com/en-us/sql/t-sql/functions/openjson-transact-sql?view=sql-server-2017
 
-DATA MODEL
-* FactRun - run related data, e.g. floor reached, character played, ascension level, ...
-* FactFloor - floor related data, e.g. floor type, encounter, item purged, gold per floor, health per floor, max hp per floor, ...
-* FactFloorItem - floor reward related data, e.g. cards obtained, potions obtained, relics obtained
+BUGS
+* 2018-10-13 event loot doesn't show up in metrics
+** issue: relics and cards obtained through events aren't stored in the data model
+** resolution: compare master_deck and relics data with other item data sources
+** status: in progress
+* 2018-10-13 encounters can be null
+** issue: events trigger damage_taken without entering an encounter name
+** resolution: load event names and encounter names into DimEvent, store event choice in DimEventChoice
+** status: in progress
