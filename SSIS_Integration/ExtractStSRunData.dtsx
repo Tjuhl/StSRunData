@@ -11,11 +11,47 @@
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="115"
-  DTS:VersionGUID="{0C676933-9B8B-43FF-BD04-C0B4BA9F0F2E}">
+  DTS:VersionBuild="153"
+  DTS:VersionGUID="{E61F3C20-C703-4984-AFC3-1DA6F9FCE95C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{A0441976-06D8-41D6-821D-184B784FEF28}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="ImportedStSRunFiles">
+      <DTS:VariableValue
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{B0D96BBB-664A-488D-9D07-E77C6E5B85A0}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="NewStSRunFiles">
+      <DTS:VariableValue
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
+    </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
       DTS:DTSID="{3A793B62-6AF9-48AC-ABF4-93B5CDF5CFFC}"
@@ -23,7 +59,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="StSRunDirectory">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Projects\StSRuns\JorbsStSRuns_GoogleDrive</DTS:VariableValue>
+        DTS:DataType="8">C:\Projects\StSRuns</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -47,23 +83,24 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\load StS run files\for each StS run"
+          DTS:refId="Package\load StS run files\for each StS run file"
           DTS:CreationName="STOCK:FOREACHLOOP"
           DTS:Description="Foreach Loop Container"
-          DTS:DTSID="{4a28a275-7a50-4401-a3cb-c19c7583a3e4}"
+          DTS:Disabled="True"
+          DTS:DTSID="{3adfc61c-04bb-4ed3-a0f2-b0e259efed90}"
           DTS:ExecutableType="STOCK:FOREACHLOOP"
           DTS:LocaleID="-1"
-          DTS:ObjectName="for each StS run">
+          DTS:ObjectName="for each StS run file">
           <DTS:ForEachEnumerator
             DTS:CreationName="Microsoft.ForEachFileEnumerator"
-            DTS:DTSID="{a7da6516-c1ee-4974-97c6-076dd54cb435}"
+            DTS:DTSID="{4d558540-38dc-42fd-9713-133acaf0c0bd}"
             DTS:ObjectName="{9F9BA44C-C3A6-45F2-B8DC-8EDBED08545E}">
             <DTS:PropertyExpression
               DTS:Name="Directory">@[User::StSRunDirectory]</DTS:PropertyExpression>
             <DTS:ObjectData>
               <ForEachFileEnumeratorProperties>
                 <FEFEProperty
-                  Folder="C:\Projects\StSRuns\JorbsStSRuns_GoogleDrive" />
+                  Folder="C:\Projects\StSRuns" />
                 <FEFEProperty
                   FileSpec="*.run" />
                 <FEFEProperty
@@ -76,7 +113,70 @@
           <DTS:Variables />
           <DTS:Executables>
             <DTS:Executable
-              DTS:refId="Package\load StS run files\for each StS run\IN StSRun file &gt;&gt; OUT DWH imp StSJSONData"
+              DTS:refId="Package\load StS run files\for each StS run file\IN StSRun filename &gt;&gt; OUT DWH imp StSRunFiles"
+              DTS:CreationName="Microsoft.ExecuteSQLTask"
+              DTS:Description="Task &quot;SQL ausführen&quot;"
+              DTS:DTSID="{7b0adfc4-978e-477a-b6c7-7f42cd6f7227}"
+              DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+              DTS:LocaleID="-1"
+              DTS:ObjectName="IN StSRun filename &gt;&gt; OUT DWH imp StSRunFiles"
+              DTS:ThreadHint="0">
+              <DTS:Variables />
+              <DTS:ObjectData>
+                <SQLTask:SqlTaskData
+                  SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
+                  SQLTask:SqlStatementSource="INSERT INTO [imp].[StSRunFiles]&#xA;SELECT&#xA; ? AS [file_name],&#xA; 0 AS [load_status],&#xA; GETDATE() AS [imported_at]&#xA; WHERE NOT EXISTS &#xA; (&#xA; SELECT &#xA;  f.[file_name]&#xA; FROM [imp].[StSRunFiles] f&#xA;  WHERE [file_name] = f.[file_name]&#xA; )"
+                  SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+                  <SQLTask:ParameterBinding
+                    SQLTask:ParameterName="0"
+                    SQLTask:DtsVariableName="User::StSRunFilename"
+                    SQLTask:ParameterDirection="Input"
+                    SQLTask:DataType="129"
+                    SQLTask:ParameterSize="-1" />
+                </SQLTask:SqlTaskData>
+              </DTS:ObjectData>
+            </DTS:Executable>
+          </DTS:Executables>
+          <DTS:ForEachVariableMappings>
+            <DTS:ForEachVariableMapping
+              DTS:CreationName=""
+              DTS:DTSID="{E6A623EA-4143-482D-BA36-6CD05642029F}"
+              DTS:ObjectName="{E6A623EA-4143-482D-BA36-6CD05642029F}"
+              DTS:ValueIndex="0"
+              DTS:VariableName="User::StSRunFilename" />
+          </DTS:ForEachVariableMappings>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\load StS run files\for each StS run not yet imported"
+          DTS:CreationName="STOCK:FOREACHLOOP"
+          DTS:Description="Foreach Loop Container"
+          DTS:DTSID="{4a28a275-7a50-4401-a3cb-c19c7583a3e4}"
+          DTS:ExecutableType="STOCK:FOREACHLOOP"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="for each StS run not yet imported">
+          <DTS:ForEachEnumerator
+            DTS:CreationName="Microsoft.ForEachFileEnumerator"
+            DTS:DTSID="{620546C1-3AEE-4668-95E2-C915314F2909}"
+            DTS:ObjectName="{620546C1-3AEE-4668-95E2-C915314F2909}">
+            <DTS:PropertyExpression
+              DTS:Name="Directory">@[User::StSRunDirectory]</DTS:PropertyExpression>
+            <DTS:ObjectData>
+              <ForEachFileEnumeratorProperties>
+                <FEFEProperty
+                  Folder="C:\Projects\StSRuns" />
+                <FEFEProperty
+                  FileSpec="*.run" />
+                <FEFEProperty
+                  FileNameRetrievalType="0" />
+                <FEFEProperty
+                  Recurse="-1" />
+              </ForEachFileEnumeratorProperties>
+            </DTS:ObjectData>
+          </DTS:ForEachEnumerator>
+          <DTS:Variables />
+          <DTS:Executables>
+            <DTS:Executable
+              DTS:refId="Package\load StS run files\for each StS run not yet imported\IN StSRun file &gt;&gt; OUT DWH imp StSJSONData"
               DTS:CreationName="Microsoft.ExecuteSQLTask"
               DTS:Description="Task &quot;SQL ausführen&quot;"
               DTS:DTSID="{82b81926-3d91-4542-9cd1-d7ef711951b6}"
@@ -273,11 +373,33 @@ END CATCH;"</DTS:PropertyExpression>
           <DTS:ForEachVariableMappings>
             <DTS:ForEachVariableMapping
               DTS:CreationName=""
-              DTS:DTSID="{7DACBD3B-6947-4179-89F2-2F53F6A3283A}"
-              DTS:ObjectName="{7DACBD3B-6947-4179-89F2-2F53F6A3283A}"
+              DTS:DTSID="{1E169EBE-B11E-462D-A203-B8D038BD1D41}"
+              DTS:ObjectName="{1E169EBE-B11E-462D-A203-B8D038BD1D41}"
               DTS:ValueIndex="0"
               DTS:VariableName="User::StSRunFilename" />
           </DTS:ForEachVariableMappings>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\load StS run files\IN DWH imp StSRunFiles not yet imported files"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Task &quot;SQL ausführen&quot;"
+          DTS:Disabled="True"
+          DTS:DTSID="{943D48F6-CE22-4254-9A4F-2EEC80ABC9AB}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="IN DWH imp StSRunFiles not yet imported files"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{43C3C4C4-9959-4268-85E7-5EEE1B86BBEB}"
+              SQLTask:SqlStatementSource="SELECT &#xA;&#x9;[file_name]&#xA;FROM [DWH].[imp].[StSRunFiles]&#xA;&#x9;WHERE [load_status] = 0"
+              SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="0"
+                SQLTask:DtsVariableName="User::NewStSRunFiles" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
         </DTS:Executable>
         <DTS:Executable
           DTS:refId="Package\load StS run files\truncate DWH imp StSJSONData"
@@ -302,11 +424,27 @@ END CATCH;"</DTS:PropertyExpression>
         <DTS:PrecedenceConstraint
           DTS:refId="Package\load StS run files.PrecedenceConstraints[Constraint]"
           DTS:CreationName=""
-          DTS:DTSID="{CAE07F80-DEA2-4AB0-8A74-C8DE2062D629}"
+          DTS:DTSID="{31283B65-E407-48B6-B17F-9696A20F12E0}"
           DTS:From="Package\load StS run files\truncate DWH imp StSJSONData"
           DTS:LogicalAnd="True"
           DTS:ObjectName="Constraint"
-          DTS:To="Package\load StS run files\for each StS run" />
+          DTS:To="Package\load StS run files\for each StS run file" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\load StS run files.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{D6600CF6-9060-4EF4-A94B-B0B0DB17C51D}"
+          DTS:From="Package\load StS run files\IN DWH imp StSRunFiles not yet imported files"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\load StS run files\for each StS run not yet imported" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\load StS run files.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{A9290EE3-6AE4-4380-97AA-9D7A30728225}"
+          DTS:From="Package\load StS run files\for each StS run file"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\load StS run files\IN DWH imp StSRunFiles not yet imported files" />
       </DTS:PrecedenceConstraints>
     </DTS:Executable>
     <DTS:Executable
@@ -422,25 +560,84 @@ END CATCH;"</DTS:PropertyExpression>
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="320,42"
+          Id="Package\load StS run files\for each StS run file\IN StSRun filename &gt;&gt; OUT DWH imp StSRunFiles"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="331,103"
+          Size="331,146"
+          Id="Package\load StS run files\for each StS run file"
+          TopLeft="5.50000000000003,107.5" />
         <NodeLayout
           Size="301,42"
-          Id="Package\load StS run files\for each StS run\IN StSRun file &gt;&gt; OUT DWH imp StSJSONData"
+          Id="Package\load StS run files\for each StS run not yet imported\IN StSRun file &gt;&gt; OUT DWH imp StSJSONData"
           TopLeft="5.5,5.5" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="312,103"
           Size="312,146"
-          Id="Package\load StS run files\for each StS run"
-          TopLeft="5.50000000000003,107.5" />
+          Id="Package\load StS run files\for each StS run not yet imported"
+          TopLeft="15.0000000000001,415.5" />
+        <NodeLayout
+          Size="300,42"
+          Id="Package\load StS run files\IN DWH imp StSRunFiles not yet imported files"
+          TopLeft="21.0000000000001,313.5" />
         <NodeLayout
           Size="232,42"
           Id="Package\load StS run files\truncate DWH imp StSJSONData"
-          TopLeft="45.5,5.5" />
+          TopLeft="55,5.5" />
         <EdgeLayout
           Id="Package\load StS run files.PrecedenceConstraints[Constraint]"
-          TopLeft="161.5,47.5">
+          TopLeft="171,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\load StS run files.PrecedenceConstraints[Constraint 1]"
+          TopLeft="171,355.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\load StS run files.PrecedenceConstraints[Constraint 2]"
+          TopLeft="171,253.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -463,14 +660,14 @@ END CATCH;"</DTS:PropertyExpression>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="323,309"
-          Size="323,352"
+          PanelSize="342,617"
+          Size="342,660"
           Id="Package\load StS run files"
-          TopLeft="5.50000000000006,107.5" />
+          TopLeft="5.50000000000009,107.5" />
         <NodeLayout
           Size="177,42"
           Id="Package\truncate DWH tables"
-          TopLeft="78.5,5.5" />
+          TopLeft="88,5.5" />
         <NodeLayout
           Size="268,42"
           Id="Package\update StS dimension tables\EXECUTE imp spStSRunLoadDimensions"
@@ -481,7 +678,7 @@ END CATCH;"</DTS:PropertyExpression>
           PanelSize="279,103"
           Size="279,146"
           Id="Package\update StS dimension tables"
-          TopLeft="27.5000000000001,519.5" />
+          TopLeft="37.0000000000001,827.5" />
         <NodeLayout
           Size="238,42"
           Id="Package\update StS fact tables\EXECUTE imp spStSRunLoadFacts"
@@ -492,10 +689,10 @@ END CATCH;"</DTS:PropertyExpression>
           PanelSize="249,103"
           Size="249,146"
           Id="Package\update StS fact tables"
-          TopLeft="42.5000000000001,725.5" />
+          TopLeft="52.0000000000002,1033.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="167,459.5">
+          TopLeft="176.5,767.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -517,7 +714,7 @@ END CATCH;"</DTS:PropertyExpression>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="167,665.5">
+          TopLeft="176.5,973.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -539,7 +736,7 @@ END CATCH;"</DTS:PropertyExpression>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="167,47.5">
+          TopLeft="176.5,47.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"

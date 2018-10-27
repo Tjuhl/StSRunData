@@ -88,6 +88,7 @@
     <Build Include="dwh\Tables\FactFloorEvent.sql" />
     <Build Include="dwh\Tables\FactFloorItems.sql" />
     <Build Include="dwh\Tables\DimDate.sql" />
+    <Build Include="imp\Tables\StSRunFiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SQL-Scripts.publish.xml" />
