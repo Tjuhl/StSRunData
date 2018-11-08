@@ -56,6 +56,14 @@ CROSS APPLY OPENJSON ([event_choices])
 WITH (
 	[event_name] nvarchar(255)	
 	)
+UNION ALL
+-- victory
+SELECT 
+	'victory!?',
+	'encounter' AS [EncouterType],
+	getdate(),
+	getdate(),
+	system_user
 
 -- [dwh].[DimEventChoice]
 INSERT INTO [dwh].[DimEventChoice]
@@ -84,6 +92,7 @@ SELECT
 	WHEN t.[path_type] = 'M' THEN 'enemy' 
 	WHEN t.[path_type] = 'BOSS' THEN 'boss'
 	WHEN t.[path_type] = 'brel' THEN 'boss_relic' 
+	WHEN t.[path_type] = 'act4' THEN 'act_4'
 	ELSE 'unknown'
 	END AS [path_name],
 	getdate(),

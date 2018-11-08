@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [imp].[StSJSONData](
 	[ascension_level] [int] NULL,
 	[boss_relics] [nvarchar](max) NULL,
-	[build_version] [date] NULL,
+	[build_version] [nvarchar](20) NULL,
 	[campfire_choices] [nvarchar](max) NULL,
 	[campfire_rested] [int] NULL,
 	[campfire_upgraded] [int] NULL,
