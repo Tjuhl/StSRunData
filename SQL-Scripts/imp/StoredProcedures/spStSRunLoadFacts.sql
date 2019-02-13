@@ -301,7 +301,7 @@ CROSS APPLY STRING_SPLIT([path_taken], ',')
 )
 ,item_interaction AS 
 (
--- cards purged
+-- card purged in shop
 SELECT  
 	purge_floor.[play_id],
 	COALESCE(purge_floor.[item_purged_floor],0) AS [Floor],
@@ -327,6 +327,23 @@ FROM
 	CROSS APPLY STRING_SPLIT([items_purged], ',') 
 		WHERE value != '[]'
 	) AS purge_item ON purge_item.[play_id] = purge_floor.[play_id] AND purge_item.[col_index] = purge_floor.[col_index]
+UNION ALL 
+-- card purged via peace pipe (campfire)
+-- campfire upgrades
+SELECT  
+	[play_id],
+	CONVERT(int,(CASE WHEN [floor] like '%.%' THEN SUBSTRING([floor],0,CHARINDEX('.',[floor],0)) ELSE [floor] END)) AS [floor],
+	REPLACE(campfire_choices.[data],' ','') AS [ItemName],
+	'card_purged' AS [ItemInteraction]
+FROM [imp].[StSJSONData]
+CROSS APPLY OPENJSON (campfire_choices)
+WITH 
+	(
+		[floor] nvarchar(5),
+		[data] nvarchar(255),     
+		[key] nvarchar(20)
+	) AS campfire_choices
+	WHERE campfire_choices.[key] = 'PURGE'
 UNION ALL 
 -- card picked	
 SELECT 
@@ -423,6 +440,22 @@ FROM
 	FROM [imp].[StSJSONData] j		
 	CROSS APPLY STRING_SPLIT([items_purchased], ',') 
 	) purchase_item ON purchase_item.[play_id] = purchase_floor.[play_id] AND purchase_item.[col_index] = purchase_floor.[col_index]
+-- campfire upgrades
+UNION ALL 
+SELECT  
+	[play_id],
+	CONVERT(int,(CASE WHEN [floor] like '%.%' THEN SUBSTRING([floor],0,CHARINDEX('.',[floor],0)) ELSE [floor] END)) AS [floor],
+	REPLACE(campfire_choices.[data],' ','') AS [ItemName],
+	'card_upgraded' AS [ItemInteraction]
+FROM [imp].[StSJSONData]
+CROSS APPLY OPENJSON (campfire_choices)
+WITH 
+	(
+		[floor] nvarchar(5),
+		[data] nvarchar(255),     
+		[key] nvarchar(20)
+	) AS campfire_choices
+	WHERE campfire_choices.[key] = 'SMITH'
 -- potions obtained
 UNION ALL
 SELECT 
@@ -439,7 +472,7 @@ WITH (
 )
 , item_end_of_run AS
 (
---  relics
+--  relics >> looted from events = relics at and of run not yet covered
 SELECT 
 	[play_id],
 	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s'),'''','') AS [ItemName],
@@ -453,7 +486,7 @@ LEFT JOIN [dwh].[DimItem] i ON i.[ItemName] = REPLACE(REPLACE(REPLACE(REPLACE(RE
 	WHERE i.[ItemType] = 'relic'
 	AND value != '[]'
 UNION ALL
--- master deck
+--  master_deck >> cards looted from events = cards at and of run not yet covered
 SELECT 
 	[play_id],
 	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(value,'"',''),']',''),'[',''),' ',''),'\u0027s','s') AS [ItemName],
@@ -510,5 +543,4 @@ WHERE NOT EXISTS
 	LEFT JOIN [dwh].[DimItem] i ON i.[ItemName] = item_interaction.[ItemName]
 		WHERE item_interaction.[ItemName] = item_end_of_run.[ItemName] AND item_interaction.[play_id] = item_end_of_run.[play_id]
 	)
-
 END
