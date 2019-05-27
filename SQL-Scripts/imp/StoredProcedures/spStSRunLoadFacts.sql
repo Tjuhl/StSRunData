@@ -329,7 +329,6 @@ FROM
 	) AS purge_item ON purge_item.[play_id] = purge_floor.[play_id] AND purge_item.[col_index] = purge_floor.[col_index]
 UNION ALL 
 -- card purged via peace pipe (campfire)
--- campfire upgrades
 SELECT  
 	[play_id],
 	CONVERT(int,(CASE WHEN [floor] like '%.%' THEN SUBSTRING([floor],0,CHARINDEX('.',[floor],0)) ELSE [floor] END)) AS [floor],
@@ -445,7 +444,7 @@ UNION ALL
 SELECT  
 	[play_id],
 	CONVERT(int,(CASE WHEN [floor] like '%.%' THEN SUBSTRING([floor],0,CHARINDEX('.',[floor],0)) ELSE [floor] END)) AS [floor],
-	REPLACE(campfire_choices.[data],' ','') AS [ItemName],
+	REPLACE(campfire_choices.[data],' ','')+'+1' AS [ItemName], -- all upgraded cards get +1 for end of run data comparison purposes
 	'card_upgraded' AS [ItemInteraction]
 FROM [imp].[StSJSONData]
 CROSS APPLY OPENJSON (campfire_choices)
@@ -538,7 +537,7 @@ WHERE NOT EXISTS
 	SELECT 
 		-- dimension ids
 		item_interaction.[play_id] AS [PlayId],
-		i.[ItemId]		
+		i.[ItemId]
 	FROM item_interaction
 	LEFT JOIN [dwh].[DimItem] i ON i.[ItemName] = item_interaction.[ItemName]
 		WHERE item_interaction.[ItemName] = item_end_of_run.[ItemName] AND item_interaction.[play_id] = item_end_of_run.[play_id]

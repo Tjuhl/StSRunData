@@ -7,12 +7,12 @@
   DTS:CreatorName="DESKTOP-M9ABD91\Tjuhl"
   DTS:DTSID="{2982872C-FCB0-4AE0-A3C4-183331CEED48}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="15.0.0900.30"
+  DTS:LastModifiedProductVersion="15.0.1300.375"
   DTS:LocaleID="1031"
   DTS:ObjectName="ExtractStSRunData"
   DTS:PackageType="5"
-  DTS:VersionBuild="160"
-  DTS:VersionGUID="{566CFFFA-632D-42B2-979C-056621920175}">
+  DTS:VersionBuild="165"
+  DTS:VersionGUID="{3699C1EB-E387-410F-8173-58EB4C8688D9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
