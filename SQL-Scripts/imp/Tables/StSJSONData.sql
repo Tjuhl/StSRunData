@@ -48,5 +48,6 @@
 	[run_timestamp] [bigint] NULL,
 	[victory] [nvarchar](5) NULL,
 	[win_rate] [int] NULL,
-	[inserted_at] [datetime] NULL
+	[inserted_at] [datetime] NULL,
+	[player] nvarchar(255) null
 )

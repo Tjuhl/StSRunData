@@ -35,5 +35,6 @@
 	IsTrial nvarchar(5) null, -- "is_trial": false,	
 	ETLInsertedAt datetime null,
 	ETLUpdatedAt datetime null,
-	ETLUser nvarchar(50) null
+	ETLUser nvarchar(50) null,
+	Player nvarchar(255) null
 )	

@@ -41,7 +41,8 @@ SELECT
 	-- logging
 	getdate() AS [ETLInsertedAt],
 	getdate() AS [ETLUpdatedAt],
-	system_user AS [ETLUser]	
+	system_user AS [ETLUser],
+	[player] as [Player]
 FROM [imp].[StSJSONData] s
 LEFT JOIN [dwh].[DimBuildVersion] b ON b.[BuildVersion] = s.[build_version]
 LEFT JOIN [dwh].[DimAscensionLevel] a ON a.[AscensionLevel] = s.[ascension_level]
